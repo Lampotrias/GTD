@@ -7,12 +7,16 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insertTask(task: TaskEntity): Long
+	suspend fun insertTask(task: TaskEntity)
+
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	suspend fun insertTaskTagCrossRef(crossRef: TasksTagsCrossRef)
 
 	@Update
 	suspend fun updateTask(task: TaskEntity)
@@ -25,7 +29,19 @@ interface TaskDao {
 
 	@Transaction
 	@Query("SELECT * FROM tasks WHERE task_id = :taskId")
-	suspend fun getTaskWithTagsById(taskId: Long): TaskWithTagsAndProject?
+	suspend fun getTaskWithTagsById(taskId: Long): TaskWithTagsAndProjectEntity?
+
+	@Transaction
+	@Query("SELECT * FROM tasks")
+	fun getAllTasksWithTags(): Flow<List<TaskWithTagsAndProjectEntity>>
+
+	@Transaction
+	@Query("SELECT * FROM tasks WHERE list = :list")
+	fun selectTasksInList(list: String): Flow<List<TaskWithTagsAndProjectEntity>>
+
+	@Transaction
+	@Query("SELECT * FROM tasks WHERE project_id = :projectId")
+	fun selectTasksInProject(projectId: Long): Flow<List<TaskWithTagsAndProjectEntity>>
 //
 //	@Transaction
 //	@Query("SELECT * FROM tasks")

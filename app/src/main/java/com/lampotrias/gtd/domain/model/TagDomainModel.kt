@@ -7,17 +7,5 @@ data class TagDomainModel(
     val iconName: String,
 ) {
     companion object {
-//		fun fromEntity(tagEntityWithTag: TagEntityWithTag): TagDomainModel {
-//			return TagDomainModel(
-//				id = tagEntityWithTag.tag.id,
-//				name = tagEntityWithTag.tag.name,
-//				iconName = tagEntityWithTag.tag.iconName,
-//				type = TagTypeDomainModel(
-//					id = tagEntityWithTag.tagType.id,
-//					name = tagEntityWithTag.tagType.name
-//				)
-//			)
-//
-//		}
     }
 }

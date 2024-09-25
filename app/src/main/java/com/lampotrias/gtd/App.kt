@@ -6,6 +6,7 @@ import com.lampotrias.gtd.di.databaseModule
 import com.lampotrias.gtd.di.repositoryModule
 import com.lampotrias.gtd.di.viewModelsModule
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.fragment.koin.fragmentFactory
 import org.koin.core.context.GlobalContext.startKoin
 
 class App : Application() {
@@ -13,6 +14,7 @@ class App : Application() {
 		super.onCreate()
 
 		startKoin {
+			fragmentFactory()
 			androidContext(this@App)
 			modules(
 				appModule,

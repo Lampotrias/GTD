@@ -6,15 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity(
 	tableName = "tags",
-//	foreignKeys = [
-//		ForeignKey(
-//			entity = TagTypeEntity::class,
-//			parentColumns = ["id"],
-//			childColumns = ["type_id"],
-//			onDelete = ForeignKey.CASCADE
-//		)
-//	],
-//	indices = [Index(value = ["type_id"])]
 )
 data class TagEntity(
 	@PrimaryKey(autoGenerate = true)

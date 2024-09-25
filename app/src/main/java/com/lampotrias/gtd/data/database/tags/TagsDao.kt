@@ -20,8 +20,8 @@ interface TagDao {
 	suspend fun deleteTag(tag: TagEntity)
 
 	@Query("SELECT * FROM tags WHERE tag_id = :tagId")
-	suspend fun getTagById(tagId: Long): TagEntityWithTag?
+	suspend fun getTagById(tagId: Long): TagEntityWithType?
 
 	@Query("SELECT * FROM tags")
-	suspend fun getAllTags(): List<TagEntityWithTag>
+	suspend fun getAllTags(): List<TagEntityWithType>
 }

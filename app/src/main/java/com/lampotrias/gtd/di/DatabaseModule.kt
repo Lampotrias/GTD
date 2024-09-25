@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.execSQL
 import com.lampotrias.gtd.data.database.GTDDatabase
+import com.lampotrias.gtd.data.database.tasks.TaskEntity
 import org.koin.dsl.module
 
 val databaseModule = module {
@@ -94,8 +95,8 @@ val databaseModule = module {
 
 					try {
 						connection.execSQL(
-							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`) " +
-									"VALUES (1, 'task 1 project 1', 1)"
+							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`) " +
+									"VALUES (1, 'task 1 project 1', 1, 'task 1 project 1 description', '${TaskEntity.LIST_NEXT}')"
 						)
 					} catch (ex: Exception) {
 						ex.printStackTrace()
@@ -103,8 +104,8 @@ val databaseModule = module {
 
 					try {
 						connection.execSQL(
-							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`) " +
-									"VALUES (2, 'task 2 project 1', 1)"
+							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`) " +
+									"VALUES (2, 'task 2 project 1', 1, 'task 2 project 1 description', '${TaskEntity.LIST_WAITING}')"
 						)
 					} catch (ex: Exception) {
 						ex.printStackTrace()
@@ -112,8 +113,8 @@ val databaseModule = module {
 
 					try {
 						connection.execSQL(
-							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`) " +
-									"VALUES (3, 'task 3 no project', null)"
+							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`) " +
+									"VALUES (3, 'task 3 no project', null, 'task 3 no project description', '${TaskEntity.LIST_SOMEDAY}')"
 						)
 					} catch (ex: Exception) {
 						ex.printStackTrace()
@@ -121,8 +122,8 @@ val databaseModule = module {
 
 					try {
 						connection.execSQL(
-							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`) " +
-									"VALUES (4, 'task 4 project 2', 2)"
+							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`) " +
+									"VALUES (4, 'task 4 project 2', 2, 'task 4 project 2 description', '${TaskEntity.LIST_INBOX}')"
 						)
 					} catch (ex: Exception) {
 						ex.printStackTrace()
@@ -130,8 +131,89 @@ val databaseModule = module {
 
 					try {
 						connection.execSQL(
-							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`) " +
-									"VALUES (5, 'task 5 project 3', 3)"
+							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`) " +
+									"VALUES (5, 'task 5 project 3', 3, 'task 5 project 3 description', '${TaskEntity.LIST_CALENDAR}')"
+						)
+					} catch (ex: Exception) {
+						ex.printStackTrace()
+					}
+
+					try {
+						connection.execSQL(
+							"INSERT INTO `tasks_tags` (`task_id`, `tag_id`) " +
+									"VALUES (1, 1)"
+						)
+					} catch (ex: Exception) {
+						ex.printStackTrace()
+					}
+
+					try {
+						connection.execSQL(
+							"INSERT INTO `tasks_tags` (`task_id`, `tag_id`) " +
+									"VALUES (1, 2)"
+						)
+					} catch (ex: Exception) {
+						ex.printStackTrace()
+					}
+
+					try {
+						connection.execSQL(
+							"INSERT INTO `tasks_tags` (`task_id`, `tag_id`) " +
+									"VALUES (1, 3)"
+						)
+					} catch (ex: Exception) {
+						ex.printStackTrace()
+					}
+
+					try {
+						connection.execSQL(
+							"INSERT INTO `tasks_tags` (`task_id`, `tag_id`) " +
+									"VALUES (2, 2)"
+						)
+					} catch (ex: Exception) {
+						ex.printStackTrace()
+					}
+
+					try {
+						connection.execSQL(
+							"INSERT INTO `tasks_tags` (`task_id`, `tag_id`) " +
+									"VALUES (3, 1)"
+						)
+					} catch (ex: Exception) {
+						ex.printStackTrace()
+					}
+
+					try {
+						connection.execSQL(
+							"INSERT INTO `tasks_tags` (`task_id`, `tag_id`) " +
+									"VALUES (4, 2)"
+						)
+					} catch (ex: Exception) {
+						ex.printStackTrace()
+					}
+
+					try {
+						connection.execSQL(
+							"INSERT INTO `tasks_tags` (`task_id`, `tag_id`) " +
+									"VALUES (4, 3)"
+						)
+					} catch (ex: Exception) {
+						ex.printStackTrace()
+					}
+
+					try {
+						connection.execSQL(
+							"INSERT INTO `tasks_tags` (`task_id`, `tag_id`) " +
+									"VALUES (5, 1)"
+						)
+					} catch (ex: Exception) {
+						ex.printStackTrace()
+					}
+
+					try {
+						connection.execSQL(
+							"INSERT INTO `tasks_tags` (`task_id`, `tag_id`) " +
+									"VALUES (5, 3)"
 						)
 					} catch (ex: Exception) {
 						ex.printStackTrace()
