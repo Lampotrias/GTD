@@ -24,6 +24,7 @@ class TasksMapper(
             },
             list = entity.taskEntity.list,
             description = entity.taskEntity.description,
+            isCompleted = entity.taskEntity.isCompleted,
         )
     }
 

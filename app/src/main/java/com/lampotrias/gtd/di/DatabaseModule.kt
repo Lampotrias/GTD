@@ -95,8 +95,8 @@ val databaseModule = module {
 
 					try {
 						connection.execSQL(
-							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`) " +
-									"VALUES (1, 'task 1 project 1', 1, 'task 1 project 1 description', '${TaskEntity.LIST_NEXT}')"
+							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`, `is_completed`) " +
+									"VALUES (1, 'task 1 project 1', 1, 'task 1 project 1 description', '${TaskEntity.LIST_NEXT}', 0)"
 						)
 					} catch (ex: Exception) {
 						ex.printStackTrace()
@@ -104,8 +104,8 @@ val databaseModule = module {
 
 					try {
 						connection.execSQL(
-							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`) " +
-									"VALUES (2, 'task 2 project 1', 1, 'task 2 project 1 description', '${TaskEntity.LIST_WAITING}')"
+							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`, `is_completed`) " +
+									"VALUES (2, 'task 2 project 1', 1, 'task 2 project 1 description', '${TaskEntity.LIST_WAITING}', 1)"
 						)
 					} catch (ex: Exception) {
 						ex.printStackTrace()
@@ -113,8 +113,8 @@ val databaseModule = module {
 
 					try {
 						connection.execSQL(
-							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`) " +
-									"VALUES (3, 'task 3 no project', null, 'task 3 no project description', '${TaskEntity.LIST_SOMEDAY}')"
+							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`, `is_completed`) " +
+									"VALUES (3, 'task 3 no project', null, 'task 3 no project description', '${TaskEntity.LIST_SOMEDAY}', 0)"
 						)
 					} catch (ex: Exception) {
 						ex.printStackTrace()
@@ -122,8 +122,8 @@ val databaseModule = module {
 
 					try {
 						connection.execSQL(
-							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`) " +
-									"VALUES (4, 'task 4 project 2', 2, 'task 4 project 2 description', '${TaskEntity.LIST_INBOX}')"
+							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`, `is_completed`) " +
+									"VALUES (4, 'task 4 project 2', 2, 'task 4 project 2 description', '${TaskEntity.LIST_INBOX}', 0)"
 						)
 					} catch (ex: Exception) {
 						ex.printStackTrace()
@@ -131,8 +131,8 @@ val databaseModule = module {
 
 					try {
 						connection.execSQL(
-							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`) " +
-									"VALUES (5, 'task 5 project 3', 3, 'task 5 project 3 description', '${TaskEntity.LIST_CALENDAR}')"
+							"INSERT INTO `tasks` (`task_id`, `name`, `project_id`, `description`, `list`, `is_completed`) " +
+									"VALUES (5, 'task 5 project 3', 3, 'task 5 project 3 description', '${TaskEntity.LIST_CALENDAR}', 0)"
 						)
 					} catch (ex: Exception) {
 						ex.printStackTrace()

@@ -9,6 +9,7 @@ import com.lampotrias.gtd.domain.mappers.TasksMapper
 import com.lampotrias.gtd.domain.model.TaskDomainModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class TaskRepositoryImpl(
     private val taskDao: TaskDao,
@@ -24,36 +25,44 @@ class TaskRepositoryImpl(
         description: String,
         list: String
     ) {
-        val taskEntity = TaskEntity(
-            id = id,
-            name = name,
-            projectId = projectId,
-            description = description,
-            list = list
-        )
-        // Вставка задачи в базу данных
-        taskDao.insertTask(taskEntity)
-
-        // Связываем задачу с тегами
-        tagIds.forEach { tagId ->
-            val crossRef = TasksTagsCrossRef(
-                taskEntityId = taskEntity.id,
-                tagId = tagId
+        withContext(dispatcherProvider.io) {
+            val taskEntity = TaskEntity(
+                id = id,
+                name = name,
+                projectId = projectId,
+                description = description,
+                list = list
             )
-            // Вставка связей между задачей и тегами
-            taskDao.insertTaskTagCrossRef(crossRef)
+            // Вставка задачи в базу данных
+            taskDao.insertTask(taskEntity)
+
+            // Связываем задачу с тегами
+            tagIds.forEach { tagId ->
+                val crossRef = TasksTagsCrossRef(
+                    taskEntityId = taskEntity.id,
+                    tagId = tagId
+                )
+                // Вставка связей между задачей и тегами
+                taskDao.insertTaskTagCrossRef(crossRef)
+            }
         }
     }
 
-    override suspend fun getTaskById(taskId: Long): TaskDomainModel? {
-        val taskWithTags = taskDao.getTaskWithTagsById(taskId) ?: return null
-
-        return tasksMapper.toModel(taskWithTags)
+    override fun getTaskById(taskId: Long): Flow<TaskDomainModel?> {
+        return taskDao.getTaskWithTagsById(taskId).map { entity ->
+            entity?.let { tasksMapper.toModel(entity) }
+        }
     }
 
-    override suspend fun getAllTasks(): Flow<List<TaskDomainModel>> {
+    override fun getAllTasks(): Flow<List<TaskDomainModel>> {
         return taskDao.getAllTasksWithTags().map { taskWithTags ->
             taskWithTags.map { tasksMapper.toModel(it) }
+        }
+    }
+
+    override suspend fun updateTaskComplete(taskId: Long, isCompleted: Boolean) {
+        withContext(dispatcherProvider.io) {
+            taskDao.updateTaskComplete(taskId, isCompleted)
         }
     }
 }

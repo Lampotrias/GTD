@@ -7,4 +7,5 @@ data class TaskDomainModel(
     val tags: List<TagDomainModel>,
     val list: String,
     val description: String,
+    val isCompleted: Boolean,
 )

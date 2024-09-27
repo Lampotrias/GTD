@@ -16,6 +16,8 @@ data class TaskEntity(
     @ColumnInfo(name = "project_id")
     val projectId: Long?,
     val description: String,
+    @ColumnInfo(name = "is_completed")
+    val isCompleted: Boolean = false
 ) {
     companion object {
         const val LIST_NEXT = "next"

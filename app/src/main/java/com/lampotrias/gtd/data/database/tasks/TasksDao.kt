@@ -29,7 +29,7 @@ interface TaskDao {
 
 	@Transaction
 	@Query("SELECT * FROM tasks WHERE task_id = :taskId")
-	suspend fun getTaskWithTagsById(taskId: Long): TaskWithTagsAndProjectEntity?
+	fun getTaskWithTagsById(taskId: Long): Flow<TaskWithTagsAndProjectEntity?>
 
 	@Transaction
 	@Query("SELECT * FROM tasks")
@@ -42,6 +42,9 @@ interface TaskDao {
 	@Transaction
 	@Query("SELECT * FROM tasks WHERE project_id = :projectId")
 	fun selectTasksInProject(projectId: Long): Flow<List<TaskWithTagsAndProjectEntity>>
+
+	@Query("UPDATE tasks SET is_completed = :completed WHERE task_id = :taskId")
+	fun updateTaskComplete(taskId: Long, completed: Boolean)
 //
 //	@Transaction
 //	@Query("SELECT * FROM tasks")
