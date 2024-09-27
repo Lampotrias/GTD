@@ -5,7 +5,4 @@ data class TagDomainModel(
     val type: TagTypeDomainModel,
     val name: String,
     val iconName: String,
-) {
-    companion object {
-    }
-}
+)

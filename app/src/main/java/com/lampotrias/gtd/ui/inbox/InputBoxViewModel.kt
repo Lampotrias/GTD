@@ -3,7 +3,6 @@ package com.lampotrias.gtd.ui.inbox
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lampotrias.gtd.data.database.tasks.TaskWithTagsAndProjectEntity
 import com.lampotrias.gtd.domain.TaskRepository
 import com.lampotrias.gtd.domain.model.TaskDomainModel
 import kotlinx.coroutines.delay

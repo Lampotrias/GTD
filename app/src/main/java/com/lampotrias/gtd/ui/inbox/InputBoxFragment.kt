@@ -43,10 +43,6 @@ class InputBoxFragment(private val taskDao: TaskDao) : Fragment() {
         parametersOf(requireArguments().getString("qqq"))
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

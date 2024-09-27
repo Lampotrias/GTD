@@ -5,13 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lampotrias.gtd.data.database.tags.TagDao
 import com.lampotrias.gtd.data.database.tasks.TaskDao
-import com.lampotrias.gtd.domain.ProjectsRepository
 import kotlinx.coroutines.launch
 
 class MainViewModel(
 	private val tagsDao: TagDao,
 	private val taskDao: TaskDao,
-	private val projectsRepository: ProjectsRepository,
 ) : ViewModel() {
 	init {
 		viewModelScope.launch {
