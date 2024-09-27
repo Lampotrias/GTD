@@ -2,7 +2,6 @@ package com.lampotrias.gtd.data
 
 import com.lampotrias.gtd.data.database.tasks.TaskDao
 import com.lampotrias.gtd.data.database.tasks.TaskEntity
-import com.lampotrias.gtd.data.database.tasks.TasksTagsCrossRef
 import com.lampotrias.gtd.di.DispatcherProvider
 import com.lampotrias.gtd.domain.TaskRepository
 import com.lampotrias.gtd.domain.mappers.TasksMapper
@@ -18,7 +17,6 @@ class TaskRepositoryImpl(
 ) : TaskRepository {
 
     override suspend fun insertTask(
-        id: Long,
         name: String,
         projectId: Long?,
         tagIds: List<Long>,
@@ -27,23 +25,17 @@ class TaskRepositoryImpl(
     ) {
         withContext(dispatcherProvider.io) {
             val taskEntity = TaskEntity(
-                id = id,
                 name = name,
                 projectId = projectId,
                 description = description,
                 list = list
             )
-            // Вставка задачи в базу данных
-            taskDao.insertTask(taskEntity)
 
-            // Связываем задачу с тегами
-            tagIds.forEach { tagId ->
-                val crossRef = TasksTagsCrossRef(
-                    taskEntityId = taskEntity.id,
-                    tagId = tagId
-                )
-                // Вставка связей между задачей и тегами
-                taskDao.insertTaskTagCrossRef(crossRef)
+            if (tagIds.isEmpty()) {
+                taskDao.insertTask(taskEntity)
+
+            } else {
+                taskDao.insertTaskWithTags(taskEntity, tagIds)
             }
         }
     }

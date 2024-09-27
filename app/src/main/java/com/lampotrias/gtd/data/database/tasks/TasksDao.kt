@@ -12,39 +12,49 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TaskDao {
 
-	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insertTask(task: TaskEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTask(task: TaskEntity): Long
 
-	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insertTaskTagCrossRef(crossRef: TasksTagsCrossRef)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTagCrossRef(crossRef: TasksTagsCrossRef)
 
-	@Update
-	suspend fun updateTask(task: TaskEntity)
+    @Transaction
+    suspend fun insertTaskWithTags(task: TaskEntity, tagIds: List<Long>) {
+        val taskId = insertTask(task)
 
-	@Delete
-	suspend fun deleteTask(task: TaskEntity)
+        tagIds.forEach { tagId ->
+            val crossRef = TasksTagsCrossRef(taskEntityId = taskId, tagId = tagId)
+            insertTagCrossRef(crossRef)
+        }
+    }
 
-	@Query("SELECT * FROM tasks WHERE task_id = :taskId")
-	suspend fun getTaskById(taskId: Long): TaskEntity?
+    @Update
+    suspend fun updateTask(task: TaskEntity)
 
-	@Transaction
-	@Query("SELECT * FROM tasks WHERE task_id = :taskId")
-	fun getTaskWithTagsById(taskId: Long): Flow<TaskWithTagsAndProjectEntity?>
+    @Delete
+    suspend fun deleteTask(task: TaskEntity)
 
-	@Transaction
-	@Query("SELECT * FROM tasks")
-	fun getAllTasksWithTags(): Flow<List<TaskWithTagsAndProjectEntity>>
+    @Query("SELECT * FROM tasks WHERE task_id = :taskId")
+    suspend fun getTaskById(taskId: Long): TaskEntity?
 
-	@Transaction
-	@Query("SELECT * FROM tasks WHERE list = :list")
-	fun selectTasksInList(list: String): Flow<List<TaskWithTagsAndProjectEntity>>
+    @Transaction
+    @Query("SELECT * FROM tasks WHERE task_id = :taskId")
+    fun getTaskWithTagsById(taskId: Long): Flow<TaskWithTagsAndProjectEntity?>
 
-	@Transaction
-	@Query("SELECT * FROM tasks WHERE project_id = :projectId")
-	fun selectTasksInProject(projectId: Long): Flow<List<TaskWithTagsAndProjectEntity>>
+    @Transaction
+    @Query("SELECT * FROM tasks")
+    fun getAllTasksWithTags(): Flow<List<TaskWithTagsAndProjectEntity>>
 
-	@Query("UPDATE tasks SET is_completed = :completed WHERE task_id = :taskId")
-	fun updateTaskComplete(taskId: Long, completed: Boolean)
+    @Transaction
+    @Query("SELECT * FROM tasks WHERE list = :list")
+    fun selectTasksInList(list: String): Flow<List<TaskWithTagsAndProjectEntity>>
+
+    @Transaction
+    @Query("SELECT * FROM tasks WHERE project_id = :projectId")
+    fun selectTasksInProject(projectId: Long): Flow<List<TaskWithTagsAndProjectEntity>>
+
+    @Query("UPDATE tasks SET is_completed = :completed WHERE task_id = :taskId")
+    fun updateTaskComplete(taskId: Long, completed: Boolean)
 //
 //	@Transaction
 //	@Query("SELECT * FROM tasks")

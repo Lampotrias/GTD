@@ -48,7 +48,12 @@ class InputBoxFragment(private val taskDao: TaskDao) : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentInputBoxBinding.inflate(inflater, container, false)
-        val view = binding.root
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         with(binding.recyclerView) {
             adapter = tasksAdapter
@@ -74,7 +79,5 @@ class InputBoxFragment(private val taskDao: TaskDao) : Fragment() {
                 }
             }
         }
-
-        return view
     }
 }

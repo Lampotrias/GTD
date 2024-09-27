@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
 data class TaskEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "task_id")
-    val id: Long,
+    val id: Long = 0,
     val name: String,
     val list: String, // входящие, следующие действия, лист ожидания, календарь, когда-нибудь
     @ColumnInfo(name = "project_id")

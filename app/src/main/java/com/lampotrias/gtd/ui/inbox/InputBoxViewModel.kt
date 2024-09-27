@@ -20,7 +20,7 @@ data class InboxScreenUi(
 )
 
 class InputBoxViewModel(
-    val handle: SavedStateHandle,
+    private val handle: SavedStateHandle,
     private val taskRepository: TaskRepository,
     private val sss: String
 ) : ViewModel() {
