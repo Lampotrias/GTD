@@ -1,13 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="#fff"
+  android:padding="10dp"
   tools:context=".ui.addtask.TaskAddUpdateFragment">
-  <TextView
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/editTextTaskNameLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:text="Hello" />
-</FrameLayout>
+    android:layout_height="wrap_content"
+    android:hint="Название задачи"
+    app:layout_constraintBottom_toTopOf="@+id/editTextTaskDescriptionLayout"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/editTextTaskName"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="text" />
+  </com.google.android.material.textfield.TextInputLayout>
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/editTextTaskDescriptionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Описание задачи"
+    android:paddingTop="8dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/editTextTaskNameLayout">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/editTextTaskDescription"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="top"
+      android:inputType="textMultiLine"
+      android:minLines="3" />
+  </com.google.android.material.textfield.TextInputLayout>
+  <Button
+    android:id="@+id/btn_cancel"
+    android:layout_width="150dp"
+    android:layout_height="50dp"
+    android:text="Отменить"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintEnd_toStartOf="@+id/btn_save"
+    app:layout_constraintStart_toStartOf="parent" />
+  <Button
+    android:id="@+id/btn_save"
+    android:layout_width="150dp"
+    android:layout_height="50dp"
+    android:text="Сохранить"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/btn_cancel" />
+  <ProgressBar
+    android:id="@+id/progress"
+    style="?android:attr/progressBarStyleLarge"
+    android:layout_width="56dp"
+    android:layout_height="56dp"
+    android:layout_centerHorizontal="true"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:visibility="visible" />
+</androidx.constraintlayout.widget.ConstraintLayout>
