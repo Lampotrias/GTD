@@ -67,4 +67,59 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     tools:visibility="visible" />
+  <ImageButton
+    android:id="@+id/btn_tag"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:importantForAccessibility="no"
+    android:src="@drawable/outline_local_offer_24"
+    app:layout_constraintEnd_toStartOf="@+id/btn_time"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/btn_cycle" />
+  <ImageButton
+    android:id="@+id/btn_time"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:importantForAccessibility="no"
+    android:src="@drawable/outline_alarm_24"
+    app:layout_constraintEnd_toStartOf="@+id/btn_energy"
+    app:layout_constraintStart_toEndOf="@+id/btn_tag"
+    app:layout_constraintTop_toTopOf="@+id/btn_cycle" />
+  <ImageButton
+    android:id="@+id/btn_energy"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:importantForAccessibility="no"
+    android:src="@drawable/outline_battery_charging_full_24"
+    app:layout_constraintEnd_toStartOf="@+id/btn_due"
+    app:layout_constraintStart_toEndOf="@+id/btn_time"
+    app:layout_constraintTop_toTopOf="@+id/btn_cycle" />
+  <ImageButton
+    android:id="@+id/btn_due"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:importantForAccessibility="no"
+    android:src="@drawable/outline_outlined_flag_24"
+    app:layout_constraintEnd_toStartOf="@+id/btn_notification"
+    app:layout_constraintStart_toEndOf="@+id/btn_energy"
+    app:layout_constraintTop_toTopOf="@+id/btn_cycle" />
+  <ImageButton
+    android:id="@+id/btn_notification"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:importantForAccessibility="no"
+    android:src="@drawable/outline_notifications_active_24"
+    app:layout_constraintEnd_toStartOf="@+id/btn_cycle"
+    app:layout_constraintStart_toEndOf="@+id/btn_due"
+    app:layout_constraintTop_toTopOf="@+id/btn_cycle" />
+  <ImageButton
+    android:id="@+id/btn_cycle"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:layout_marginTop="10dp"
+    android:importantForAccessibility="no"
+    android:src="@drawable/outline_autorenew_24"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/btn_notification"
+    app:layout_constraintTop_toBottomOf="@+id/editTextTaskDescriptionLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

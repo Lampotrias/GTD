@@ -7,7 +7,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelsModule = module {
-    viewModel { MainViewModel(get(), get()) }
+    viewModel { MainViewModel() }
     viewModel { InputBoxViewModel(get(), get(), get()) }
-    viewModel { TaskAddUpdateViewModel(get(), get()) }
+    viewModel { TaskAddUpdateViewModel(get(), get(), get()) }
 }
