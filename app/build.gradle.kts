@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.lampotrias.gtd"
-    compileSdk = 34
+    compileSdk = 35
 
     room {
         schemaDirectory("$projectDir/schemas")
@@ -19,7 +19,7 @@ android {
     defaultConfig {
         applicationId = "com.lampotrias.gtd"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
