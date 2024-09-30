@@ -20,10 +20,8 @@ class ProjectsRepositoryImpl(
         }
     }
 
-    override suspend fun getAllProjects(): Flow<List<ProjectDomainModel>> {
-        return withContext(dispatcherProvider.io) {
-            projectDao.getAllProjects()
-        }.map {
+    override fun getAllProjects(): Flow<List<ProjectDomainModel>> {
+        return projectDao.getAllProjects().map {
             it.map { entity ->
                 projectMapper.toModel(entity)
             }

@@ -5,13 +5,14 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="#fff"
+  android:background="#EFEEEE"
   android:padding="10dp"
   tools:context=".ui.addtask.TaskAddUpdateFragment">
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/editTextTaskNameLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#fff"
     android:hint="Название задачи"
     app:layout_constraintBottom_toTopOf="@+id/editTextTaskDescriptionLayout"
     app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +27,9 @@
     android:id="@+id/editTextTaskDescriptionLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:background="#fff"
     android:hint="Описание задачи"
-    android:paddingTop="8dp"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/editTextTaskNameLayout">
     <com.google.android.material.textfield.TextInputEditText
@@ -38,6 +40,50 @@
       android:inputType="textMultiLine"
       android:minLines="3" />
   </com.google.android.material.textfield.TextInputLayout>
+  <LinearLayout
+    android:id="@+id/list_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:background="#fff"
+    android:orientation="horizontal"
+    android:paddingVertical="10dp"
+    app:layout_constraintBottom_toTopOf="@+id/btn_cycle"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/editTextTaskDescriptionLayout">
+    <ImageView
+      android:layout_width="20dp"
+      android:layout_height="20dp"
+      android:layout_marginStart="30dp"
+      android:src="@drawable/outline_alarm_24" />
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:orientation="vertical">
+      <TextView
+        android:id="@+id/list_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="15sp"
+        android:textColor="#333"
+        tools:text="Next" />
+      <TextView
+        android:id="@+id/project_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="#3F51B5"
+        android:visibility="gone"
+        tools:text="Project 1"
+        tools:visibility="visible" />
+    </LinearLayout>
+  </LinearLayout>
   <Button
     android:id="@+id/btn_cancel"
     android:layout_width="150dp"
@@ -121,5 +167,5 @@
     android:src="@drawable/outline_autorenew_24"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toEndOf="@+id/btn_notification"
-    app:layout_constraintTop_toBottomOf="@+id/editTextTaskDescriptionLayout" />
+    app:layout_constraintTop_toBottomOf="@+id/list_container" />
 </androidx.constraintlayout.widget.ConstraintLayout>

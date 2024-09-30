@@ -9,5 +9,5 @@ import org.koin.dsl.module
 val viewModelsModule = module {
     viewModel { MainViewModel() }
     viewModel { InputBoxViewModel(get(), get(), get()) }
-    viewModel { TaskAddUpdateViewModel(get(), get(), get()) }
+    viewModel { TaskAddUpdateViewModel(get(), get(), get(), get(), get()) }
 }

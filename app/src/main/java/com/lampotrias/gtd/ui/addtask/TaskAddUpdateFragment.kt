@@ -16,6 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.lampotrias.gtd.databinding.FragmentTaskAddUpdateBinding
+import com.lampotrias.gtd.domain.model.ListDomainModel
 import com.lampotrias.gtd.domain.model.TagDomainModel
 import com.lampotrias.gtd.tools.DrawableUtils
 import com.lampotrias.gtd.tools.OnClickCooldownListener
@@ -32,6 +33,7 @@ class TaskAddUpdateFragment : Fragment() {
     private val viewModel: TaskAddUpdateViewModel by viewModel()
 
     private val selectedCustomTags = mutableListOf<TagDomainModel>()
+    private var currentList: ListDomainModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,6 +61,16 @@ class TaskAddUpdateFragment : Fragment() {
                                 requireActivity().supportFragmentManager.popBackStack()
                             }, CLOSE_FRAGMENT_DELAY)
                         }
+
+                        if (currentList == null && uiState.lists.isNotEmpty()) {
+                            currentList = uiState.lists.first()
+                            binding.listName.text = uiState.lists.first().name
+                        }
+
+                        binding.listContainer.setOnClickListener(
+                            OnClickCooldownListener {
+                            }
+                        )
 
                         uiState.tagsDialog?.getContentIfNotHandled()?.let {
                             showSelectTagsDialog(it)
@@ -96,7 +108,6 @@ class TaskAddUpdateFragment : Fragment() {
         binding.btnDue.setOnClickListener(
             OnClickCooldownListener {
                 showDatePicker { day, month, year ->
-
                 }
             }
         )
@@ -107,7 +118,6 @@ class TaskAddUpdateFragment : Fragment() {
                     title = "Нужно энергии",
                     items = listOf("мало энергии", "среднее количество", "много энергии"),
                     onItemSelected = { position, value ->
-
                     }
                 )
             }
@@ -119,7 +129,6 @@ class TaskAddUpdateFragment : Fragment() {
                     title = "Время на задачу",
                     items = listOf("5 минут", "10 минут", "15 минут", "30 минут"),
                     onItemSelected = { position, value ->
-
                     }
                 )
             }

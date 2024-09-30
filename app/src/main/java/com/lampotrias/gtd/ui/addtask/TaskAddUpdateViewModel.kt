@@ -3,18 +3,27 @@ package com.lampotrias.gtd.ui.addtask
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lampotrias.gtd.domain.ProjectsRepository
 import com.lampotrias.gtd.domain.TaskRepository
+import com.lampotrias.gtd.domain.model.ListDomainModel
+import com.lampotrias.gtd.domain.model.ProjectDomainModel
 import com.lampotrias.gtd.domain.model.TagDomainModel
 import com.lampotrias.gtd.domain.usecases.GetCustomTagsUseCase
+import com.lampotrias.gtd.domain.usecases.GetListsUseCase
 import com.lampotrias.gtd.tools.SingleEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 data class ScreenUI(
     val isLoading: Boolean = false,
     val data: String? = null,
+    val lists: List<ListDomainModel> = emptyList(),
+    val projects: List<ProjectDomainModel> = emptyList(),
     val errorMessage: String? = null,
     val tagsDialog: SingleEvent<List<TagDomainModel>>? = null,
 )
@@ -23,23 +32,40 @@ class TaskAddUpdateViewModel(
     @Suppress("unused") private val handle: SavedStateHandle,
     private val taskRepository: TaskRepository,
     private val getCustomTagsUseCase: GetCustomTagsUseCase,
+    private val getListsUseCase: GetListsUseCase,
+    private val projectsRepository: ProjectsRepository,
 ) : ViewModel() {
 
-    private val _screenUIState = MutableStateFlow(ScreenUI())
-    val uiState: StateFlow<ScreenUI> = _screenUIState
+    private val _innerScreenUI = MutableStateFlow(ScreenUI())
+
+    val uiState: StateFlow<ScreenUI> =
+        combine(
+            projectsRepository.getAllProjects(),
+            getListsUseCase.invoke(),
+            _innerScreenUI
+        ) { projects, lists, innerScreenUI ->
+            innerScreenUI.copy(
+                projects = projects,
+                lists = lists
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(WHILE_SUBSCRIBED_TIMEOUT),
+            initialValue = ScreenUI()
+        )
 
     fun saveTask(
         name: String,
         description: String,
         selectedCustomTags: MutableList<TagDomainModel>
     ) {
-        _screenUIState.value = _screenUIState.value.copy(isLoading = true)
+        _innerScreenUI.value = _innerScreenUI.value.copy(isLoading = true)
 
         viewModelScope.launch {
             delay(FAKE_DELAY)
             taskRepository.insertTask(name, null, selectedCustomTags.map { it.id }, description, "")
 
-            _screenUIState.value = _screenUIState.value.copy(
+            _innerScreenUI.value = _innerScreenUI.value.copy(
                 data = "Задача успешно добавлена",
                 isLoading = false
             )
@@ -50,7 +76,7 @@ class TaskAddUpdateViewModel(
         viewModelScope.launch {
             val customTags = getCustomTagsUseCase.invoke()
 
-            _screenUIState.value = _screenUIState.value.copy(
+            _innerScreenUI.value = _innerScreenUI.value.copy(
                 tagsDialog = SingleEvent(customTags)
             )
         }
@@ -58,5 +84,6 @@ class TaskAddUpdateViewModel(
 
     companion object {
         private const val FAKE_DELAY = 500L
+        private const val WHILE_SUBSCRIBED_TIMEOUT = 5000L
     }
 }
