@@ -10,17 +10,26 @@ import com.lampotrias.gtd.domain.mappers.ProjectMapper
 import com.lampotrias.gtd.domain.mappers.TagTypeMapper
 import com.lampotrias.gtd.domain.mappers.TasksMapper
 import com.lampotrias.gtd.domain.usecases.GetCustomTagsUseCase
+import com.lampotrias.gtd.domain.usecases.GetInboxTasksUseCase
 import com.lampotrias.gtd.domain.usecases.GetListsUseCase
+import com.lampotrias.gtd.domain.usecases.GetNextTasksUseCase
+import com.lampotrias.gtd.domain.usecases.UpdateTaskCompleteUseCase
 import org.koin.dsl.module
 
 val repositoryModule = module {
+    // Repo
     single<TaskRepository> { TaskRepositoryImpl(get(), get(), get()) }
     single<TagsRepository> { TagsRepositoryImpl(get(), get(), get()) }
+    single<ProjectsRepository> { ProjectsRepositoryImpl(get(), get(), get()) }
+
+    // UseCases
     single { GetCustomTagsUseCase(get(), get()) }
     single { GetListsUseCase(get()) }
-    // single { TagRepository(get()) }
-    // single { TagTypeRepository(get()) }
-    single<ProjectsRepository> { ProjectsRepositoryImpl(get(), get(), get()) }
+    single { GetInboxTasksUseCase(get(), get()) }
+    single { GetNextTasksUseCase(get(), get()) }
+    single { UpdateTaskCompleteUseCase(get(), get()) }
+
+    // Mappers
     single { ProjectMapper() }
     single { TasksMapper(get(), get()) }
     single { TagTypeMapper() }

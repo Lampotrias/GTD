@@ -1,12 +1,10 @@
 package com.lampotrias.gtd.data.database.tasks
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -27,12 +25,6 @@ interface TaskDao {
             insertTagCrossRef(crossRef)
         }
     }
-
-    @Update
-    suspend fun updateTask(task: TaskEntity)
-
-    @Delete
-    suspend fun deleteTask(task: TaskEntity)
 
     @Query("SELECT * FROM tasks WHERE task_id = :taskId")
     suspend fun getTaskById(taskId: Long): TaskEntity?
@@ -55,17 +47,13 @@ interface TaskDao {
 
     @Query("UPDATE tasks SET is_completed = :completed WHERE task_id = :taskId")
     fun updateTaskComplete(taskId: Long, completed: Boolean)
-//
-//	@Transaction
-//	@Query("SELECT * FROM tasks")
-//	suspend fun getAllTasksWithTags(): List<TaskWithTags>
-//
-//	@Insert(onConflict = OnConflictStrategy.REPLACE)
-//	suspend fun insertTaskTagCrossRef(crossRef: TaskTagCrossRef)
-//
-//	@Query("DELETE FROM TaskTagCrossRef WHERE task_id = :taskId")
-//	suspend fun deleteTaskTagCrossRefByTaskId(taskId: Long)
-//
-//	@Query("DELETE FROM TaskTagCrossRef WHERE task_id = :taskId AND tag_id = :tagId")
-//	suspend fun deleteTaskTagCrossRef(taskId: Long, tagId: Long)
+
+    @Query("SELECT * FROM tasks WHERE list = :list")
+    fun getTasksByList(list: String): Flow<List<TaskWithTagsAndProjectEntity>>
+
+    @Query("SELECT * FROM tasks WHERE list = :list AND project_id = :projectId")
+    fun getTasksByListAndProject(
+        list: String,
+        projectId: Long
+    ): Flow<List<TaskWithTagsAndProjectEntity>>
 }

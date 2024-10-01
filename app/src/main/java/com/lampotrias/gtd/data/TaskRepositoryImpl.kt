@@ -57,4 +57,19 @@ class TaskRepositoryImpl(
             taskDao.updateTaskComplete(taskId, isCompleted)
         }
     }
+
+    override fun getTasksByList(list: String): Flow<List<TaskDomainModel>> {
+        return taskDao.getTasksByList(list).map { taskWithTags ->
+            taskWithTags.map { tasksMapper.toModel(it) }
+        }
+    }
+
+    override fun getTasksByListAndProject(
+        list: String,
+        projectId: Long
+    ): Flow<List<TaskDomainModel>> {
+        return taskDao.getTasksByListAndProject(list, projectId).map { taskWithTags ->
+            taskWithTags.map { tasksMapper.toModel(it) }
+        }
+    }
 }

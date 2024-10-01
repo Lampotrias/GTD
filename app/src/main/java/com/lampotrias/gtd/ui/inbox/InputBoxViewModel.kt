@@ -3,9 +3,9 @@ package com.lampotrias.gtd.ui.inbox
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lampotrias.gtd.domain.TaskRepository
 import com.lampotrias.gtd.domain.model.TaskDomainModel
-import kotlinx.coroutines.delay
+import com.lampotrias.gtd.domain.usecases.GetInboxTasksUseCase
+import com.lampotrias.gtd.domain.usecases.UpdateTaskCompleteUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,23 +21,23 @@ data class InboxScreenUi(
 
 class InputBoxViewModel(
     @Suppress("unused") private val handle: SavedStateHandle,
-    private val taskRepository: TaskRepository,
-    @Suppress("unused") private val sss: String
+    getInboxTasksUseCase: GetInboxTasksUseCase,
+    private val updateTaskCompleteUseCase: UpdateTaskCompleteUseCase,
 ) : ViewModel() {
 
     private val _isLoading = MutableStateFlow(false)
 
-    val uiState: StateFlow<InboxScreenUi> = combine(taskRepository.getAllTasks(), _isLoading) { tasks, isLoading ->
-        delay(2000)
-        InboxScreenUi(
-            isLoading = isLoading,
-            items = tasks
+    val uiState: StateFlow<InboxScreenUi> =
+        combine(getInboxTasksUseCase.invoke(), _isLoading) { tasks, isLoading ->
+            InboxScreenUi(
+                isLoading = isLoading,
+                items = tasks
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(WHILE_SUBSCRIBED_TIMEOUT),
+            initialValue = InboxScreenUi(isLoading = true)
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = InboxScreenUi(isLoading = true)
-    )
 
     fun taskClick(task: TaskDomainModel) {
         TODO("Not yet implemented")
@@ -49,7 +49,11 @@ class InputBoxViewModel(
 
     fun taskCompleteChange(task: TaskDomainModel) {
         viewModelScope.launch {
-            taskRepository.updateTaskComplete(task.id, !task.isCompleted)
+            updateTaskCompleteUseCase.invoke(task.id, !task.isCompleted)
         }
+    }
+
+    companion object {
+        private const val WHILE_SUBSCRIBED_TIMEOUT = 5000L
     }
 }
