@@ -12,6 +12,7 @@ import com.lampotrias.gtd.tools.OnClickCooldownListener
 import com.lampotrias.gtd.tools.obsidian.Obsidian
 import com.lampotrias.gtd.ui.addtask.TaskAddUpdateFragment
 import com.lampotrias.gtd.ui.inbox.InputBoxFragment
+import com.lampotrias.gtd.ui.next.NextListFragment
 
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
@@ -35,6 +36,16 @@ class MainFragment : Fragment() {
                 .add(
                     R.id.fragment_container_view,
                     InputBoxFragment::class.java,
+                    bundleOf("qqq" to "111")
+                )
+                .addToBackStack(null)
+                .commit()
+        }
+        binding.btnNextList.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(
+                    R.id.fragment_container_view,
+                    NextListFragment::class.java,
                     bundleOf("qqq" to "111")
                 )
                 .addToBackStack(null)
