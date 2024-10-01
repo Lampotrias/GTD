@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.lampotrias.gtd.R
 import com.lampotrias.gtd.databinding.FragmentMainBinding
 import com.lampotrias.gtd.tools.OnClickCooldownListener
+import com.lampotrias.gtd.tools.obsidian.Obsidian
 import com.lampotrias.gtd.ui.addtask.TaskAddUpdateFragment
 import com.lampotrias.gtd.ui.inbox.InputBoxFragment
 
@@ -17,7 +18,8 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
@@ -39,16 +41,30 @@ class MainFragment : Fragment() {
                 .commit()
         }
 
-        binding.btnAddTask.setOnClickListener(OnClickCooldownListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(
-                    R.id.fragment_container_view,
-                    TaskAddUpdateFragment::class.java,
-                    bundleOf("qqq" to "111")
-                )
-                .addToBackStack(null)
-                .commit()
-        })
+        binding.test1.setOnClickListener(
+            OnClickCooldownListener {
+                Obsidian.execute(requireContext(), "obsidian://open?vault=Test&file=1")
+            }
+        )
+
+        binding.test2.setOnClickListener(
+            OnClickCooldownListener {
+                Obsidian.execute(requireContext(), "obsidian://new?vault=Test2&name=newitem&content=content")
+            }
+        )
+
+        binding.btnAddTask.setOnClickListener(
+            OnClickCooldownListener {
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .add(
+                        R.id.fragment_container_view,
+                        TaskAddUpdateFragment::class.java,
+                        bundleOf("qqq" to "111")
+                    )
+                    .addToBackStack(null)
+                    .commit()
+            }
+        )
     }
 
     override fun onDestroyView() {
