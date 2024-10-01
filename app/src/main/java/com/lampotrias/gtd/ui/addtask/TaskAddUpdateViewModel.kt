@@ -8,6 +8,7 @@ import com.lampotrias.gtd.domain.TaskRepository
 import com.lampotrias.gtd.domain.model.ListDomainModel
 import com.lampotrias.gtd.domain.model.ProjectDomainModel
 import com.lampotrias.gtd.domain.model.TagDomainModel
+import com.lampotrias.gtd.domain.model.TaskDomainModel
 import com.lampotrias.gtd.domain.usecases.GetCustomTagsUseCase
 import com.lampotrias.gtd.domain.usecases.GetListsUseCase
 import com.lampotrias.gtd.tools.SingleEvent
@@ -26,17 +27,31 @@ data class ScreenUI(
     val projects: List<ProjectDomainModel> = emptyList(),
     val errorMessage: String? = null,
     val tagsDialog: SingleEvent<List<TagDomainModel>>? = null,
+    val selectedList: ListDomainModel? = null,
+    val selectedProject: ProjectDomainModel? = null
 )
 
 class TaskAddUpdateViewModel(
     @Suppress("unused") private val handle: SavedStateHandle,
     private val taskRepository: TaskRepository,
     private val getCustomTagsUseCase: GetCustomTagsUseCase,
-    private val getListsUseCase: GetListsUseCase,
-    private val projectsRepository: ProjectsRepository,
+    getListsUseCase: GetListsUseCase,
+    projectsRepository: ProjectsRepository,
+    updatedTask: TaskDomainModel? = null
 ) : ViewModel() {
 
-    private val _innerScreenUI = MutableStateFlow(ScreenUI())
+    private val _innerScreenUI = MutableStateFlow(
+        ScreenUI(
+            selectedList = updatedTask?.list?.let {
+                ListDomainModel(
+                    code = it,
+                    name = "Inbox",
+                    iconName = ""
+                )
+            },
+            selectedProject = updatedTask?.project
+        )
+    )
 
     val uiState: StateFlow<ScreenUI> =
         combine(
@@ -46,7 +61,9 @@ class TaskAddUpdateViewModel(
         ) { projects, lists, innerScreenUI ->
             innerScreenUI.copy(
                 projects = projects,
-                lists = lists
+                lists = lists,
+                selectedList = innerScreenUI.selectedList ?: lists.firstOrNull(),
+                selectedProject = innerScreenUI.selectedProject
             )
         }.stateIn(
             scope = viewModelScope,
@@ -80,6 +97,13 @@ class TaskAddUpdateViewModel(
                 tagsDialog = SingleEvent(customTags)
             )
         }
+    }
+
+    fun applyListProject(listCode: String, projectId: Long) {
+        _innerScreenUI.value = _innerScreenUI.value.copy(
+            selectedList = uiState.value.lists.firstOrNull { it.code == listCode },
+            selectedProject = uiState.value.projects.firstOrNull { it.id == projectId }
+        )
     }
 
     companion object {

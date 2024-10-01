@@ -22,6 +22,9 @@ import com.lampotrias.gtd.tools.DrawableUtils
 import com.lampotrias.gtd.tools.OnClickCooldownListener
 import com.lampotrias.gtd.tools.changeVisibility
 import com.lampotrias.gtd.tools.dpToPx
+import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorFragment
+import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorFragment.Companion.CURRENT_LIST_KEY
+import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorFragment.Companion.CURRENT_PROJECT_KEY
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Calendar
@@ -67,8 +70,26 @@ class TaskAddUpdateFragment : Fragment() {
                             binding.listName.text = uiState.lists.first().name
                         }
 
+                        binding.listName.text = uiState.selectedList?.name
+                        binding.projectName.text = uiState.selectedProject?.name
+                        binding.projectName.changeVisibility(uiState.selectedProject?.name != null && uiState.selectedProject.name.isNotBlank())
+
                         binding.listContainer.setOnClickListener(
                             OnClickCooldownListener {
+                                val dialog = ListProjectsSelectorFragment().apply {
+                                    arguments = Bundle().apply {
+                                        putLong(CURRENT_PROJECT_KEY, uiState.selectedProject?.id ?: 0L)
+                                        putString(CURRENT_LIST_KEY, uiState.selectedList?.code ?: "")
+                                    }
+                                }
+
+                                dialog.listener = object : ListProjectsSelectorFragment.OnDialogResultListener {
+                                    override fun onDialogResult(listCode: String, projectId: Long) {
+                                        viewModel.applyListProject(listCode, projectId)
+                                    }
+                                }
+
+                                dialog.show(parentFragmentManager, "CustomDialog")
                             }
                         )
 

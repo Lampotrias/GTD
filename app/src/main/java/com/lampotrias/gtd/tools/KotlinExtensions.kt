@@ -12,3 +12,7 @@ fun Context.dpToPx(number: Int): Int = dpToPx(number.toFloat()).toInt()
 fun View.changeVisibility(isVisible: Boolean) {
     visibility = if (isVisible) View.VISIBLE else View.GONE
 }
+
+fun View.changeInvisible(isVisible: Boolean) {
+    visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+}

@@ -11,7 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.lampotrias.gtd.data.database.tasks.TaskDao
 import com.lampotrias.gtd.databinding.FragmentInputBoxBinding
 import com.lampotrias.gtd.domain.model.TaskDomainModel
 import com.lampotrias.gtd.tools.dpToPx
@@ -21,7 +20,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class InputBoxFragment(private val taskDao: TaskDao) : Fragment() {
+class InputBoxFragment : Fragment() {
     private var _binding: FragmentInputBoxBinding? = null
     private val binding get() = _binding!!
 
