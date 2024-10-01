@@ -3,6 +3,7 @@ package com.lampotrias.gtd.ui.addtask
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lampotrias.gtd.data.database.tasks.TaskEntity
 import com.lampotrias.gtd.domain.ProjectsRepository
 import com.lampotrias.gtd.domain.TaskRepository
 import com.lampotrias.gtd.domain.model.ListDomainModel
@@ -80,7 +81,13 @@ class TaskAddUpdateViewModel(
 
         viewModelScope.launch {
             delay(FAKE_DELAY)
-            taskRepository.insertTask(name, null, selectedCustomTags.map { it.id }, description, "")
+            taskRepository.insertTask(
+                name,
+                uiState.value.selectedProject?.id,
+                selectedCustomTags.map { it.id },
+                description,
+                uiState.value.selectedList?.code ?: TaskEntity.LIST_INBOX
+            )
 
             _innerScreenUI.value = _innerScreenUI.value.copy(
                 data = "Задача успешно добавлена",
