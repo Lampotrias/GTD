@@ -10,16 +10,17 @@ import com.lampotrias.gtd.ui.projects.ProjectEventListener
 
 class ProjectItemViewHolder(
     itemView: View,
-    private val listener: ProjectEventListener
+    private val listener: ProjectEventListener,
 ) : RecyclerView.ViewHolder(itemView) {
     private val tasNameView = itemView.findViewById<AppCompatTextView>(R.id.project_name)
 
     fun bind(task: ProjectDomainModel) {
         tasNameView.text = task.name
 
-        itemView.setOnClickListener(OnClickCooldownListener {
-            listener.onProjectClick(task)
-        })
+        itemView.setOnClickListener(
+            OnClickCooldownListener {
+                listener.onProjectClick(task)
+            },
+        )
     }
 }
-

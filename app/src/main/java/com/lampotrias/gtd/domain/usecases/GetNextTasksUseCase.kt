@@ -11,7 +11,5 @@ class GetNextTasksUseCase(
     @Suppress("unused")
     private val dispatcherProvider: DispatcherProvider,
 ) {
-    operator fun invoke(): Flow<List<TaskDomainModel>> {
-        return taskRepository.getTasksByList(TaskEntity.LIST_NEXT)
-    }
+    operator fun invoke(): Flow<List<TaskDomainModel>> = taskRepository.getTasksByList(TaskEntity.LIST_NEXT)
 }

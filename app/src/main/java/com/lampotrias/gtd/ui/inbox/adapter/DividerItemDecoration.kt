@@ -9,17 +9,21 @@ import androidx.recyclerview.widget.RecyclerView
 
 class DividerItemDecoration(
     private val thickness: Float,
-    @ColorInt private val color: Int
+    @ColorInt private val color: Int,
 ) : RecyclerView.ItemDecoration() {
+    private val paint =
+        Paint().apply {
+            isAntiAlias = true
+            this.color = this@DividerItemDecoration.color
+            strokeWidth = thickness
+            style = Paint.Style.FILL_AND_STROKE
+        }
 
-    private val paint = Paint().apply {
-        isAntiAlias = true
-        this.color = this@DividerItemDecoration.color
-        strokeWidth = thickness
-        style = Paint.Style.FILL_AND_STROKE
-    }
-
-    override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+    override fun onDraw(
+        canvas: Canvas,
+        parent: RecyclerView,
+        state: RecyclerView.State,
+    ) {
         super.onDraw(canvas, parent, state)
         val childCount = parent.childCount
 
@@ -40,7 +44,7 @@ class DividerItemDecoration(
         outRect: Rect,
         view: View,
         parent: RecyclerView,
-        state: RecyclerView.State
+        state: RecyclerView.State,
     ) {
         val position = parent.getChildAdapterPosition(view)
         val itemCount = state.itemCount

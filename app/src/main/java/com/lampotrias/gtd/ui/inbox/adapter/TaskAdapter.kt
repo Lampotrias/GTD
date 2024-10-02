@@ -22,19 +22,21 @@ class TaskAdapter(
         productDiffResult.dispatchUpdatesTo(this)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        return TaskViewHolder(
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): TaskViewHolder =
+        TaskViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.task_item_vh, parent, false),
-            listener
+            listener,
         )
-    }
 
-    override fun getItemCount(): Int {
-        return tasks.size
-    }
+    override fun getItemCount(): Int = tasks.size
 
-    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: TaskViewHolder,
+        position: Int,
+    ) {
         holder.bind(tasks[position])
     }
-
 }

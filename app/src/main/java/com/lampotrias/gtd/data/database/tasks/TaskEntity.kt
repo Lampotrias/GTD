@@ -17,7 +17,7 @@ data class TaskEntity(
     val projectId: Long?,
     val description: String,
     @ColumnInfo(name = "is_completed")
-    val isCompleted: Boolean = false
+    val isCompleted: Boolean = false,
 ) {
     companion object {
         const val LIST_INBOX = ""

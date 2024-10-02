@@ -3,7 +3,7 @@ package com.lampotrias.gtd.di
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-class DefaultDispatcherProvider: DispatcherProvider {
+class DefaultDispatcherProvider : DispatcherProvider {
     override val io: CoroutineDispatcher
         get() = Dispatchers.IO
     override val main: CoroutineDispatcher

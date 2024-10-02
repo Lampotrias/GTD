@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "projects")
 data class ProjectEntity(
-	@PrimaryKey(autoGenerate = true)
-	val id: Long,
-	val name: String,
-	@ColumnInfo(name = "icon_name")
-	val iconName: String
+    @PrimaryKey(autoGenerate = true)
+    val id: Long,
+    val name: String,
+    @ColumnInfo(name = "icon_name")
+    val iconName: String
 )

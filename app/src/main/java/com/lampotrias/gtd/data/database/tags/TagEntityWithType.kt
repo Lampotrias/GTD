@@ -5,10 +5,10 @@ import androidx.room.Relation
 import com.lampotrias.gtd.data.database.tagtypes.TagTypeEntity
 
 data class TagEntityWithType(
-	@Embedded val tag: TagEntity,
-	@Relation(
-		parentColumn = "type_id",
-		entityColumn = "id"
-	)
-	val tagType: TagTypeEntity,
+    @Embedded val tag: TagEntity,
+    @Relation(
+        parentColumn = "type_id",
+        entityColumn = "id",
+    )
+    val tagType: TagTypeEntity,
 )

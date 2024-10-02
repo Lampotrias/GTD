@@ -12,16 +12,15 @@ class TagsRepositoryImpl(
     private val tagTypeMapper: TagTypeMapper,
     private val dispatcherProvider: DispatcherProvider,
 ) : TagsRepository {
-    override suspend fun getTagsByTypeId(typeId: Long): List<TagDomainModel> {
-        return withContext(dispatcherProvider.io) {
+    override suspend fun getTagsByTypeId(typeId: Long): List<TagDomainModel> =
+        withContext(dispatcherProvider.io) {
             tagsDao.getTagsByTypeId(typeId).map {
                 TagDomainModel(
                     id = it.tag.id,
                     name = it.tag.name,
                     iconName = it.tag.iconName,
-                    type = tagTypeMapper.toModel(it.tagType)
+                    type = tagTypeMapper.toModel(it.tagType),
                 )
             }
         }
-    }
 }

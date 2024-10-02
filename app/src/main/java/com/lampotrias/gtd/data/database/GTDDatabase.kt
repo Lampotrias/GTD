@@ -20,11 +20,14 @@ import com.lampotrias.gtd.data.database.tasks.TasksTagsCrossRef
         ProjectEntity::class,
         TasksTagsCrossRef::class,
     ],
-    version = 1
+    version = 1,
 )
 abstract class GTDDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
+
     abstract fun tagDao(): TagsDao
+
     abstract fun tagTypeDao(): TagTypeDao
+
     abstract fun projectDao(): ProjectDao
 }

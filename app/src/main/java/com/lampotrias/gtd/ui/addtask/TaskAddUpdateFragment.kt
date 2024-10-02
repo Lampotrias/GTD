@@ -41,14 +41,17 @@ class TaskAddUpdateFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentTaskAddUpdateBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -58,7 +61,8 @@ class TaskAddUpdateFragment : Fragment() {
                         binding.progress.changeVisibility(uiState.isLoading)
 
                         if (uiState.data != null) {
-                            Toast.makeText(requireContext(), uiState.data, Toast.LENGTH_SHORT)
+                            Toast
+                                .makeText(requireContext(), uiState.data, Toast.LENGTH_SHORT)
                                 .show()
                             binding.root.postDelayed({
                                 requireActivity().supportFragmentManager.popBackStack()
@@ -72,25 +76,40 @@ class TaskAddUpdateFragment : Fragment() {
 
                         binding.listName.text = uiState.selectedList?.name
                         binding.projectName.text = uiState.selectedProject?.name
-                        binding.projectName.changeVisibility(uiState.selectedProject?.name != null && uiState.selectedProject.name.isNotBlank())
+                        binding.projectName.changeVisibility(
+                            uiState.selectedProject?.name != null &&
+                                uiState.selectedProject.name.isNotBlank(),
+                        )
 
                         binding.listContainer.setOnClickListener(
                             OnClickCooldownListener {
-                                val dialog = ListProjectsSelectorFragment().apply {
-                                    arguments = Bundle().apply {
-                                        putLong(CURRENT_PROJECT_KEY, uiState.selectedProject?.id ?: 0L)
-                                        putString(CURRENT_LIST_KEY, uiState.selectedList?.code ?: "")
+                                val dialog =
+                                    ListProjectsSelectorFragment().apply {
+                                        arguments =
+                                            Bundle().apply {
+                                                putLong(
+                                                    CURRENT_PROJECT_KEY,
+                                                    uiState.selectedProject?.id ?: 0L,
+                                                )
+                                                putString(
+                                                    CURRENT_LIST_KEY,
+                                                    uiState.selectedList?.code ?: "",
+                                                )
+                                            }
                                     }
-                                }
 
-                                dialog.listener = object : ListProjectsSelectorFragment.OnDialogResultListener {
-                                    override fun onDialogResult(listCode: String, projectId: Long) {
-                                        viewModel.applyListProject(listCode, projectId)
+                                dialog.listener =
+                                    object : ListProjectsSelectorFragment.OnDialogResultListener {
+                                        override fun onDialogResult(
+                                            listCode: String,
+                                            projectId: Long,
+                                        ) {
+                                            viewModel.applyListProject(listCode, projectId)
+                                        }
                                     }
-                                }
 
                                 dialog.show(parentFragmentManager, "CustomDialog")
-                            }
+                            },
                         )
 
                         uiState.tagsDialog?.getContentIfNotHandled()?.let {
@@ -117,20 +136,20 @@ class TaskAddUpdateFragment : Fragment() {
                 val name = binding.editTextTaskName.text.toString()
                 val description = binding.editTextTaskDescription.text.toString()
                 viewModel.saveTask(name, description, selectedCustomTags)
-            }
+            },
         )
 
         binding.btnCancel.setOnClickListener(
             OnClickCooldownListener {
                 requireActivity().supportFragmentManager.popBackStack()
-            }
+            },
         )
 
         binding.btnDue.setOnClickListener(
             OnClickCooldownListener {
                 showDatePicker { day, month, year ->
                 }
-            }
+            },
         )
 
         binding.btnEnergy.setOnClickListener(
@@ -139,9 +158,9 @@ class TaskAddUpdateFragment : Fragment() {
                     title = "Нужно энергии",
                     items = listOf("мало энергии", "среднее количество", "много энергии"),
                     onItemSelected = { position, value ->
-                    }
+                    },
                 )
-            }
+            },
         )
 
         binding.btnTime.setOnClickListener(
@@ -150,28 +169,27 @@ class TaskAddUpdateFragment : Fragment() {
                     title = "Время на задачу",
                     items = listOf("5 минут", "10 минут", "15 минут", "30 минут"),
                     onItemSelected = { position, value ->
-                    }
+                    },
                 )
-            }
+            },
         )
 
         binding.btnTag.setOnClickListener(
             OnClickCooldownListener {
                 viewModel.clickOpenDialogTags()
-            }
+            },
         )
     }
 
-    private fun createButtonBackground(): Drawable {
-        return RippleDrawable(
+    private fun createButtonBackground(): Drawable =
+        RippleDrawable(
             ColorStateList.valueOf(Color.parseColor("#14000000")),
             DrawableUtils.createCustomBackground(
                 Color.LTGRAY,
-                requireContext().dpToPx(BUTTON_CORNER_RADIUS)
+                requireContext().dpToPx(BUTTON_CORNER_RADIUS),
             ),
-            null
+            null,
         )
-    }
 
     private fun showSelectTagsDialog(tags: List<TagDomainModel>) {
         showMultiSelectDialog(
@@ -182,38 +200,38 @@ class TaskAddUpdateFragment : Fragment() {
                 selectedTags.forEach { (index, _) ->
                     selectedCustomTags.add(tags[index])
                 }
-            }
+            },
         )
     }
 
     private fun showSelectDialog(
         title: String,
         items: List<String>,
-        onItemSelected: (Int, String) -> Unit
+        onItemSelected: (Int, String) -> Unit,
     ) {
         val itemsArray = items.toTypedArray()
 
-        AlertDialog.Builder(requireContext())
+        AlertDialog
+            .Builder(requireContext())
             .setTitle(title)
             .setItems(itemsArray) { dialog, which ->
                 val selectedItem = items[which]
                 dialog.dismiss()
                 onItemSelected(which, selectedItem)
-            }
-            .setNegativeButton("Отмена") { dialog, _ ->
+            }.setNegativeButton("Отмена") { dialog, _ ->
                 dialog.dismiss()
-            }
-            .show()
+            }.show()
     }
 
     private fun showMultiSelectDialog(
         @Suppress("SameParameterValue") title: String,
         items: List<String>,
-        onItemSelected: (Map<Int, String>) -> Unit
+        onItemSelected: (Map<Int, String>) -> Unit,
     ) {
         val selectedTags = mutableMapOf<Int, String>()
 
-        AlertDialog.Builder(requireContext())
+        AlertDialog
+            .Builder(requireContext())
             .setTitle(title)
             .setMultiChoiceItems(items.toTypedArray(), null) { _, which, isChecked ->
                 val tag = items[which]
@@ -222,11 +240,9 @@ class TaskAddUpdateFragment : Fragment() {
                 } else {
                     selectedTags.remove(which)
                 }
-            }
-            .setPositiveButton("ОК") { _, _ ->
+            }.setPositiveButton("ОК") { _, _ ->
                 onItemSelected.invoke(selectedTags)
-            }
-            .setNegativeButton("Отмена", null)
+            }.setNegativeButton("Отмена", null)
             .create()
             .show()
     }
@@ -237,15 +253,16 @@ class TaskAddUpdateFragment : Fragment() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            { _, selectedYear, selectedMonth, selectedDay ->
-                onDateSelected(selectedDay, selectedMonth, selectedYear)
-            },
-            year,
-            month,
-            day
-        )
+        val datePickerDialog =
+            DatePickerDialog(
+                requireContext(),
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    onDateSelected(selectedDay, selectedMonth, selectedYear)
+                },
+                year,
+                month,
+                day,
+            )
 
         datePickerDialog.show()
     }

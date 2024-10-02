@@ -10,31 +10,29 @@ import com.lampotrias.gtd.data.database.tags.TagEntity
 import com.lampotrias.gtd.data.database.tags.TagEntityWithType
 
 data class TaskWithTagsAndProjectEntity(
-	@Embedded
-	val taskEntity: TaskEntity,
-
-	@Relation(
-		entity = TagEntity::class,
-		parentColumn = "task_id",
-		entityColumn = "tag_id",
-		associateBy = Junction(TasksTagsCrossRef::class)
-	)
-	val tags: List<TagEntityWithType>,
-
-	@Relation(
-		parentColumn = "project_id",
-		entityColumn = "id"
-	)
-	val projectEntity: ProjectEntity?
+    @Embedded
+    val taskEntity: TaskEntity,
+    @Relation(
+        entity = TagEntity::class,
+        parentColumn = "task_id",
+        entityColumn = "tag_id",
+        associateBy = Junction(TasksTagsCrossRef::class),
+    )
+    val tags: List<TagEntityWithType>,
+    @Relation(
+        parentColumn = "project_id",
+        entityColumn = "id",
+    )
+    val projectEntity: ProjectEntity?,
 )
 
 @Entity(
-	tableName = "tasks_tags",
-	primaryKeys = ["task_id", "tag_id"]
+    tableName = "tasks_tags",
+    primaryKeys = ["task_id", "tag_id"],
 )
 data class TasksTagsCrossRef(
-	@ColumnInfo(name = "task_id")
-	val taskEntityId: Long,
-	@ColumnInfo(name = "tag_id")
-	val tagId: Long
+    @ColumnInfo(name = "task_id")
+    val taskEntityId: Long,
+    @ColumnInfo(name = "tag_id")
+    val tagId: Long,
 )

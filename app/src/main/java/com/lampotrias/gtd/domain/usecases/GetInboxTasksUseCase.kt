@@ -11,7 +11,5 @@ class GetInboxTasksUseCase(
     @Suppress("unused")
     private val dispatcherProvider: DispatcherProvider,
 ) {
-    operator fun invoke(): Flow<List<TaskDomainModel>> {
-        return taskRepository.getTasksByList(TaskEntity.LIST_INBOX)
-    }
+    operator fun invoke(): Flow<List<TaskDomainModel>> = taskRepository.getTasksByList(TaskEntity.LIST_INBOX)
 }

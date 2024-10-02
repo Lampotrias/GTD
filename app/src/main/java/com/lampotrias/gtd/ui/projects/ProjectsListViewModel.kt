@@ -14,26 +14,25 @@ import kotlinx.coroutines.flow.stateIn
 data class ProjectsListScreenUi(
     val title: String = "",
     val isLoading: Boolean = false,
-    val items: List<ProjectDomainModel> = emptyList()
+    val items: List<ProjectDomainModel> = emptyList(),
 )
 
 class ProjectsListViewModel(
     @Suppress("unused") private val handle: SavedStateHandle,
     projectsRepository: ProjectsRepository,
 ) : ViewModel() {
-
     private val _isLoading = MutableStateFlow(false)
 
     val uiState: StateFlow<ProjectsListScreenUi> =
         combine(projectsRepository.getAllProjects(), _isLoading) { tasks, isLoading ->
             ProjectsListScreenUi(
                 isLoading = isLoading,
-                items = tasks
+                items = tasks,
             )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(WHILE_SUBSCRIBED_TIMEOUT),
-            initialValue = ProjectsListScreenUi(isLoading = true)
+            initialValue = ProjectsListScreenUi(isLoading = true),
         )
 
     companion object {

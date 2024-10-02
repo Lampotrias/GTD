@@ -27,33 +27,41 @@ class ProjectsListFragment : Fragment() {
     private var _binding: FragmentProjectListBinding? = null
     private val binding get() = _binding!!
 
-    private val tasksAdapter = ProjectsListAdapter(object : ProjectEventListener {
-        override fun onProjectClick(task: ProjectDomainModel) {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(
-                    R.id.fragment_container_view,
-                    InputBoxFragment::class.java,
-                    bundleOf("qqq" to "111")
-                )
-                .addToBackStack(null)
-                .commit()
-        }
-    })
+    private val tasksAdapter =
+        ProjectsListAdapter(
+            object : ProjectEventListener {
+                override fun onProjectClick(task: ProjectDomainModel) {
+                    requireActivity()
+                        .supportFragmentManager
+                        .beginTransaction()
+                        .add(
+                            R.id.fragment_container_view,
+                            InputBoxFragment::class.java,
+                            bundleOf("qqq" to "111"),
+                        ).addToBackStack(null)
+                        .commit()
+                }
+            },
+        )
 
     private val viewModel: ProjectsListViewModel by viewModel {
         parametersOf(requireArguments().getString("qqq"))
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentProjectListBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding.recyclerView) {
@@ -61,9 +69,9 @@ class ProjectsListFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(
                 DividerItemDecoration(
-                    thickness = requireContext().dpToPx(0.5f),
-                    color = Color.GRAY
-                )
+                    thickness = requireContext().dpToPx(SEPARATOR_HEIGHT),
+                    color = Color.GRAY,
+                ),
             )
         }
 
@@ -80,5 +88,9 @@ class ProjectsListFragment : Fragment() {
                 }
             }
         }
+    }
+
+    companion object {
+        private const val SEPARATOR_HEIGHT = 0.5f
     }
 }

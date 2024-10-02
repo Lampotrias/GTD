@@ -22,18 +22,21 @@ class ProjectsListAdapter(
         productDiffResult.dispatchUpdatesTo(this)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectItemViewHolder {
-        return ProjectItemViewHolder(
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ProjectItemViewHolder =
+        ProjectItemViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.project_item_vh, parent, false),
-            listener
+            listener,
         )
-    }
 
-    override fun getItemCount(): Int {
-        return tasks.size
-    }
+    override fun getItemCount(): Int = tasks.size
 
-    override fun onBindViewHolder(holder: ProjectItemViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ProjectItemViewHolder,
+        position: Int,
+    ) {
         holder.bind(tasks[position])
     }
 }

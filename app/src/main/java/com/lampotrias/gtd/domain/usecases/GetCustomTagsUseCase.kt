@@ -9,11 +9,10 @@ class GetCustomTagsUseCase(
     private val tagsRepository: TagsRepository,
     private val dispatcherProvider: DispatcherProvider,
 ) {
-    suspend operator fun invoke(): List<TagDomainModel> {
-        return withContext(dispatcherProvider.io) {
+    suspend operator fun invoke(): List<TagDomainModel> =
+        withContext(dispatcherProvider.io) {
             tagsRepository.getTagsByTypeId(CUSTOM_TAG_TYPE_ID)
         }
-    }
 
     companion object {
         private const val CUSTOM_TAG_TYPE_ID = 1L

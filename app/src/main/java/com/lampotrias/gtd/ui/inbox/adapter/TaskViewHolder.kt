@@ -18,12 +18,10 @@ import com.lampotrias.gtd.ui.inbox.TaskEventListener
 
 class TaskViewHolder(
     itemView: View,
-    private val listener: TaskEventListener
+    private val listener: TaskEventListener,
 ) : RecyclerView.ViewHolder(itemView) {
-
     private val dp1px = itemView.context.dpToPx(1)
     private val dp8px = itemView.context.dpToPx(8f)
-
 
     private val tagsContainer = itemView.findViewById<LinearLayout>(R.id.tags_container)
     private val tasNameView = itemView.findViewById<AppCompatTextView>(R.id.task_name)
@@ -37,39 +35,48 @@ class TaskViewHolder(
 
         tagsContainer.removeAllViews()
         task.tags.forEachIndexed { index, tag ->
-            val tagView = TagView(itemView.context).apply {
-                text = tag.name
-                background = DrawableUtils.createCustomBackground(
-                    backgroundColor = Color.YELLOW,
-                    cornerRadius = dp8px,
-                    borderWidth = dp1px,
-                    borderColor = Color.GRAY
-                )
-            }
+            val tagView =
+                TagView(itemView.context).apply {
+                    text = tag.name
+                    background =
+                        DrawableUtils.createCustomBackground(
+                            backgroundColor = Color.YELLOW,
+                            cornerRadius = dp8px,
+                            borderWidth = dp1px,
+                            borderColor = Color.GRAY,
+                        )
+                }
 
             tagsContainer.addView(
                 tagView,
-                LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    marginStart = if (index == 0) 0 else dp8px.toInt()
-                })
+                LinearLayout
+                    .LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                    ).apply {
+                        marginStart = if (index == 0) 0 else dp8px.toInt()
+                    },
+            )
         }
 
-        itemView.setOnClickListener(OnClickCooldownListener {
-            listener.onTaskClick(task)
-        })
+        itemView.setOnClickListener(
+            OnClickCooldownListener {
+                listener.onTaskClick(task)
+            },
+        )
 
-        checkBoxView.setOnClickListener(OnClickCooldownListener {
-            listener.onTaskCompleteChange(task)
-        })
+        checkBoxView.setOnClickListener(
+            OnClickCooldownListener {
+                listener.onTaskCompleteChange(task)
+            },
+        )
 
-        favoriteView.setOnClickListener(OnClickCooldownListener {
-            listener.onTaskFavoriteClick(task)
-        })
+        favoriteView.setOnClickListener(
+            OnClickCooldownListener {
+                listener.onTaskFavoriteClick(task)
+            },
+        )
 
         tagsContainer.changeVisibility(task.tags.isNotEmpty())
     }
 }
-

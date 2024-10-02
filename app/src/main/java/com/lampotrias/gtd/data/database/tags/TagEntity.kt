@@ -18,4 +18,3 @@ data class TagEntity(
     @ColumnInfo(name = "icon_name")
     val iconName: String,
 )
-

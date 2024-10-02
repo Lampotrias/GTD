@@ -29,7 +29,7 @@ data class ScreenUI(
     val errorMessage: String? = null,
     val tagsDialog: SingleEvent<List<TagDomainModel>>? = null,
     val selectedList: ListDomainModel? = null,
-    val selectedProject: ProjectDomainModel? = null
+    val selectedProject: ProjectDomainModel? = null,
 )
 
 class TaskAddUpdateViewModel(
@@ -38,44 +38,45 @@ class TaskAddUpdateViewModel(
     private val getCustomTagsUseCase: GetCustomTagsUseCase,
     getListsUseCase: GetListsUseCase,
     projectsRepository: ProjectsRepository,
-    updatedTask: TaskDomainModel? = null
+    updatedTask: TaskDomainModel? = null,
 ) : ViewModel() {
-
-    private val _innerScreenUI = MutableStateFlow(
-        ScreenUI(
-            selectedList = updatedTask?.list?.let {
-                ListDomainModel(
-                    code = it,
-                    name = "Inbox",
-                    iconName = ""
-                )
-            },
-            selectedProject = updatedTask?.project
+    private val _innerScreenUI =
+        MutableStateFlow(
+            ScreenUI(
+                selectedList =
+                    updatedTask?.list?.let {
+                        ListDomainModel(
+                            code = it,
+                            name = "Inbox",
+                            iconName = "",
+                        )
+                    },
+                selectedProject = updatedTask?.project,
+            ),
         )
-    )
 
     val uiState: StateFlow<ScreenUI> =
         combine(
             projectsRepository.getAllProjects(),
             getListsUseCase.invoke(),
-            _innerScreenUI
+            _innerScreenUI,
         ) { projects, lists, innerScreenUI ->
             innerScreenUI.copy(
                 projects = projects,
                 lists = lists,
                 selectedList = innerScreenUI.selectedList ?: lists.firstOrNull(),
-                selectedProject = innerScreenUI.selectedProject
+                selectedProject = innerScreenUI.selectedProject,
             )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(WHILE_SUBSCRIBED_TIMEOUT),
-            initialValue = ScreenUI()
+            initialValue = ScreenUI(),
         )
 
     fun saveTask(
         name: String,
         description: String,
-        selectedCustomTags: MutableList<TagDomainModel>
+        selectedCustomTags: MutableList<TagDomainModel>,
     ) {
         _innerScreenUI.value = _innerScreenUI.value.copy(isLoading = true)
 
@@ -86,13 +87,14 @@ class TaskAddUpdateViewModel(
                 uiState.value.selectedProject?.id,
                 selectedCustomTags.map { it.id },
                 description,
-                uiState.value.selectedList?.code ?: TaskEntity.LIST_INBOX
+                uiState.value.selectedList?.code ?: TaskEntity.LIST_INBOX,
             )
 
-            _innerScreenUI.value = _innerScreenUI.value.copy(
-                data = "Задача успешно добавлена",
-                isLoading = false
-            )
+            _innerScreenUI.value =
+                _innerScreenUI.value.copy(
+                    data = "Задача успешно добавлена",
+                    isLoading = false,
+                )
         }
     }
 
@@ -100,17 +102,22 @@ class TaskAddUpdateViewModel(
         viewModelScope.launch {
             val customTags = getCustomTagsUseCase.invoke()
 
-            _innerScreenUI.value = _innerScreenUI.value.copy(
-                tagsDialog = SingleEvent(customTags)
-            )
+            _innerScreenUI.value =
+                _innerScreenUI.value.copy(
+                    tagsDialog = SingleEvent(customTags),
+                )
         }
     }
 
-    fun applyListProject(listCode: String, projectId: Long) {
-        _innerScreenUI.value = _innerScreenUI.value.copy(
-            selectedList = uiState.value.lists.firstOrNull { it.code == listCode },
-            selectedProject = uiState.value.projects.firstOrNull { it.id == projectId }
-        )
+    fun applyListProject(
+        listCode: String,
+        projectId: Long,
+    ) {
+        _innerScreenUI.value =
+            _innerScreenUI.value.copy(
+                selectedList = uiState.value.lists.firstOrNull { it.code == listCode },
+                selectedProject = uiState.value.projects.firstOrNull { it.id == projectId },
+            )
     }
 
     companion object {

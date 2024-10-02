@@ -9,7 +9,6 @@ import androidx.room.Update
 
 @Dao
 interface TagsDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTag(tag: TagEntity): Long
 

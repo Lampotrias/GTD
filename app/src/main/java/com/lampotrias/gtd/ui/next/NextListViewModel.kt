@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 data class NextListScreenUi(
     val title: String = "",
     val isLoading: Boolean = false,
-    val items: List<TaskDomainModel> = emptyList()
+    val items: List<TaskDomainModel> = emptyList(),
 )
 
 class NextListViewModel(
@@ -24,25 +24,26 @@ class NextListViewModel(
     getNextTasksUseCase: GetNextTasksUseCase,
     private val updateTaskCompleteUseCase: UpdateTaskCompleteUseCase,
 ) : ViewModel() {
-
     private val _isLoading = MutableStateFlow(false)
 
     val uiState: StateFlow<NextListScreenUi> =
         combine(getNextTasksUseCase.invoke(), _isLoading) { tasks, isLoading ->
             NextListScreenUi(
                 isLoading = isLoading,
-                items = tasks
+                items = tasks,
             )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(WHILE_SUBSCRIBED_TIMEOUT),
-            initialValue = NextListScreenUi(isLoading = true)
+            initialValue = NextListScreenUi(isLoading = true),
         )
 
+    @Suppress("UNUSED_PARAMETER")
     fun taskClick(task: TaskDomainModel) {
         TODO("Not yet implemented")
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun taskFavoriteClick(task: TaskDomainModel) {
         TODO("Not yet implemented")
     }

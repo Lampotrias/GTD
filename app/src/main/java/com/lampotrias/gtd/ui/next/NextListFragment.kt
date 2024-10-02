@@ -25,34 +25,41 @@ class NextListFragment : Fragment() {
     private var _binding: FragmentInputBoxBinding? = null
     private val binding get() = _binding!!
 
-    private val tasksAdapter = TaskAdapter(object : TaskEventListener {
-        override fun onTaskClick(task: TaskDomainModel) {
-            viewModel.taskClick(task)
-        }
+    private val tasksAdapter =
+        TaskAdapter(
+            object : TaskEventListener {
+                override fun onTaskClick(task: TaskDomainModel) {
+                    viewModel.taskClick(task)
+                }
 
-        override fun onTaskCompleteChange(task: TaskDomainModel) {
-            viewModel.taskCompleteChange(task)
-        }
+                override fun onTaskCompleteChange(task: TaskDomainModel) {
+                    viewModel.taskCompleteChange(task)
+                }
 
-        override fun onTaskFavoriteClick(task: TaskDomainModel) {
-            viewModel.taskFavoriteClick(task)
-        }
-    })
+                override fun onTaskFavoriteClick(task: TaskDomainModel) {
+                    viewModel.taskFavoriteClick(task)
+                }
+            },
+        )
 
     private val viewModel: NextListViewModel by viewModel {
         parametersOf(requireArguments().getString("qqq"))
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentInputBoxBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding.recyclerView) {
@@ -61,8 +68,8 @@ class NextListFragment : Fragment() {
             addItemDecoration(
                 DividerItemDecoration(
                     thickness = requireContext().dpToPx(0.5f),
-                    color = Color.GRAY
-                )
+                    color = Color.GRAY,
+                ),
             )
         }
 

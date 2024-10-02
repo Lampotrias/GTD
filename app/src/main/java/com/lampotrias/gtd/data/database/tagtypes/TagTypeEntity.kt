@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "tag_types")
 data class TagTypeEntity(
-	@PrimaryKey(autoGenerate = true)
-	val id: Long,
-	@ColumnInfo(name = "tag_type_name")
-	val name: String
+    @PrimaryKey(autoGenerate = true)
+    val id: Long,
+    @ColumnInfo(name = "tag_type_name")
+    val name: String,
 )

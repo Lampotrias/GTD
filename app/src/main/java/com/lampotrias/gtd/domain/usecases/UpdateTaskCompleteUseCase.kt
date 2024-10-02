@@ -8,8 +8,10 @@ class UpdateTaskCompleteUseCase(
     private val taskRepository: TaskRepository,
     private val dispatcherProvider: DispatcherProvider,
 ) {
-
-    suspend operator fun invoke(taskId: Long, isCompleted: Boolean) {
+    suspend operator fun invoke(
+        taskId: Long,
+        isCompleted: Boolean,
+    ) {
         withContext(dispatcherProvider.io) {
             taskRepository.updateTaskComplete(taskId, isCompleted)
         }

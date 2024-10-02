@@ -9,19 +9,18 @@ import androidx.room.Update
 
 @Dao
 interface TagTypeDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTagType(tagType: TagTypeEntity): Long
 
-	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insertTagType(tagType: TagTypeEntity): Long
+    @Update
+    suspend fun updateTagType(tagType: TagTypeEntity)
 
-	@Update
-	suspend fun updateTagType(tagType: TagTypeEntity)
+    @Delete
+    suspend fun deleteTagType(tagType: TagTypeEntity)
 
-	@Delete
-	suspend fun deleteTagType(tagType: TagTypeEntity)
+    @Query("SELECT * FROM tag_types WHERE id = :tagTypeId")
+    suspend fun getTagTypeById(tagTypeId: Long): TagTypeEntity?
 
-	@Query("SELECT * FROM tag_types WHERE id = :tagTypeId")
-	suspend fun getTagTypeById(tagTypeId: Long): TagTypeEntity?
-
-	@Query("SELECT * FROM tag_types")
-	suspend fun getAllTagTypes(): List<TagTypeEntity>
+    @Query("SELECT * FROM tag_types")
+    suspend fun getAllTagTypes(): List<TagTypeEntity>
 }

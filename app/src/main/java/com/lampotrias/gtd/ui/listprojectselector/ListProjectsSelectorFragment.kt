@@ -34,13 +34,15 @@ class ListProjectsSelectorFragment : DialogFragment() {
 
     var listener: OnDialogResultListener? = null
 
-    private val listAdapter = ListProjectsSelectorAdapter {
-        viewModel.selectList(it.code)
-    }
+    private val listAdapter =
+        ListProjectsSelectorAdapter {
+            viewModel.selectList(it.code)
+        }
 
-    private val projectAdapter = ListProjectsSelectorAdapter {
-        viewModel.selectProject(it.id)
-    }
+    private val projectAdapter =
+        ListProjectsSelectorAdapter {
+            viewModel.selectProject(it.id)
+        }
 
     private val viewModel: ListProjectsSelectorViewModel by viewModel {
         val currentProject = arguments?.getLong(CURRENT_PROJECT_KEY) ?: 0
@@ -49,17 +51,60 @@ class ListProjectsSelectorFragment : DialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentListProjectSelectorBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
+        initializeUI()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.uiState.collect { uiState ->
+                        listAdapter.setItems(
+                            uiState.lists.map {
+                                ListProjectAdapterModel(
+                                    code = it.code,
+                                    title = it.name,
+                                    isSelected = it.code == uiState.selectedListId,
+                                    icon = getListItemDrawable(it.code),
+                                    iconColor = getListItemIconColor(it.code),
+                                )
+                            },
+                        )
+                        projectAdapter.setItems(
+                            uiState.projects.map {
+                                ListProjectAdapterModel(
+                                    id = it.id,
+                                    title = it.name,
+                                    isSelected = it.id == uiState.selectedProjectId,
+                                    icon =
+                                        ContextCompat.getDrawable(
+                                            requireContext(),
+                                            R.drawable.ic_project_dot,
+                                        ),
+                                    iconColor = Color.BLUE,
+                                )
+                            },
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private fun initializeUI() {
         with(binding.listSelector) {
             adapter = listAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -70,67 +115,43 @@ class ListProjectsSelectorFragment : DialogFragment() {
             layoutManager = LinearLayoutManager(requireContext())
         }
 
-        dialog?.window?.decorView?.background = DrawableUtils.createCustomBackground(
-            Color.WHITE,
-            requireContext().dpToPx(DIALOG_CORNER_RADIUS)
-        )
-
-        binding.titleStatus.background = DrawableUtils.createCustomBackground(
-            Color.LTGRAY,
-            requireContext().dpToPx(TITLE_CORNER_RADIUS)
-        )
-
-        binding.titleProject.background = DrawableUtils.createCustomBackground(
-            Color.LTGRAY,
-            requireContext().dpToPx(TITLE_CORNER_RADIUS)
-        )
-
-        binding.btnOk.setOnClickListener(OnClickCooldownListener {
-            listener?.onDialogResult(
-                viewModel.uiState.value.selectedListId,
-                viewModel.uiState.value.selectedProjectId
+        dialog?.window?.decorView?.background =
+            DrawableUtils.createCustomBackground(
+                Color.WHITE,
+                requireContext().dpToPx(DIALOG_CORNER_RADIUS),
             )
-            dismiss()
-        })
 
-        binding.btnCancel.setOnClickListener(OnClickCooldownListener {
-            dismiss()
-        })
+        binding.titleStatus.background =
+            DrawableUtils.createCustomBackground(
+                Color.LTGRAY,
+                requireContext().dpToPx(TITLE_CORNER_RADIUS),
+            )
 
+        binding.titleProject.background =
+            DrawableUtils.createCustomBackground(
+                Color.LTGRAY,
+                requireContext().dpToPx(TITLE_CORNER_RADIUS),
+            )
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.uiState.collect { uiState ->
-                        listAdapter.setItems(uiState.lists.map {
-                            ListProjectAdapterModel(
-                                code = it.code,
-                                title = it.name,
-                                isSelected = it.code == uiState.selectedListId,
-                                icon = getListItemDrawable(it.code),
-                                iconColor = getListItemIconColor(it.code)
-                            )
-                        })
-                        projectAdapter.setItems(uiState.projects.map {
-                            ListProjectAdapterModel(
-                                id = it.id,
-                                title = it.name,
-                                isSelected = it.id == uiState.selectedProjectId,
-                                icon = ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.ic_project_dot
-                                ),
-                                iconColor = Color.BLUE
-                            )
-                        })
-                    }
-                }
-            }
-        }
+        binding.btnOk.setOnClickListener(
+            OnClickCooldownListener {
+                listener?.onDialogResult(
+                    viewModel.uiState.value.selectedListId,
+                    viewModel.uiState.value.selectedProjectId,
+                )
+                dismiss()
+            },
+        )
+
+        binding.btnCancel.setOnClickListener(
+            OnClickCooldownListener {
+                dismiss()
+            },
+        )
     }
 
-    private fun getListItemDrawable(listCode: String): Drawable? {
-        return when (listCode) {
+    private fun getListItemDrawable(listCode: String): Drawable? =
+        when (listCode) {
             LIST_INBOX -> ContextCompat.getDrawable(requireContext(), R.drawable.ic_inbox)
             LIST_NEXT -> ContextCompat.getDrawable(requireContext(), R.drawable.ic_next)
             LIST_WAITING -> ContextCompat.getDrawable(requireContext(), R.drawable.ic_waiting)
@@ -138,11 +159,10 @@ class ListProjectsSelectorFragment : DialogFragment() {
             LIST_SOMEDAY -> ContextCompat.getDrawable(requireContext(), R.drawable.ic_someday)
             else -> null
         }
-    }
 
     @ColorInt
-    private fun getListItemIconColor(listCode: String): Int {
-        return when (listCode) {
+    private fun getListItemIconColor(listCode: String): Int =
+        when (listCode) {
             LIST_INBOX -> Color.BLUE
             LIST_NEXT -> Color.BLUE
             LIST_WAITING -> Color.YELLOW
@@ -150,10 +170,12 @@ class ListProjectsSelectorFragment : DialogFragment() {
             LIST_SOMEDAY -> Color.RED
             else -> Color.GRAY
         }
-    }
 
     interface OnDialogResultListener {
-        fun onDialogResult(listCode: String, projectId: Long)
+        fun onDialogResult(
+            listCode: String,
+            projectId: Long,
+        )
     }
 
     companion object {

@@ -27,7 +27,6 @@ class ListProjectsSelectorViewModel(
     selectedListId: String = "",
     selectedProjectId: Long = 0L,
 ) : ViewModel() {
-
     private val selectedListIdFlow = MutableStateFlow(selectedListId)
     private val selectedProjectIdFlow = MutableStateFlow(selectedProjectId)
 
@@ -42,15 +41,16 @@ class ListProjectsSelectorViewModel(
                 projects = projects,
                 lists = lists,
                 selectedListId = selectedListId,
-                selectedProjectId = selectedProjectId
+                selectedProjectId = selectedProjectId,
             )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(WHILE_SUBSCRIBED_TIMEOUT),
-            initialValue = ListProjectSelectorScreenUI(
-                selectedListId = selectedListId,
-                selectedProjectId = selectedProjectId,
-            )
+            initialValue =
+                ListProjectSelectorScreenUI(
+                    selectedListId = selectedListId,
+                    selectedProjectId = selectedProjectId,
+                ),
         )
 
     fun selectProject(projectId: Long) {

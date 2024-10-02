@@ -8,10 +8,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import org.koin.androidx.fragment.android.setupKoinFragmentFactory
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(R.layout.main_activity) {
-    private val detailViewModel: MainViewModel by viewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         setupKoinFragmentFactory()
 
@@ -22,7 +20,6 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
 
         applyInsets(rootView)
     }
-
 
     private fun applyInsets(rootView: ViewGroup) {
         ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, windowInsets ->

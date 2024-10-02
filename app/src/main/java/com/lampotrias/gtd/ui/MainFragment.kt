@@ -22,75 +22,82 @@ class MainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnInputBox.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
+            requireActivity()
+                .supportFragmentManager
+                .beginTransaction()
                 .add(
                     R.id.fragment_container_view,
                     InputBoxFragment::class.java,
-                    bundleOf("qqq" to "111")
-                )
-                .addToBackStack(null)
+                    bundleOf("qqq" to "111"),
+                ).addToBackStack(null)
                 .commit()
         }
 
         binding.btnProjects.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
+            requireActivity()
+                .supportFragmentManager
+                .beginTransaction()
                 .add(
                     R.id.fragment_container_view,
                     ProjectsListFragment::class.java,
-                    bundleOf()
-                )
-                .addToBackStack(null)
+                    bundleOf(),
+                ).addToBackStack(null)
                 .commit()
         }
 
         binding.btnNextList.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
+            requireActivity()
+                .supportFragmentManager
+                .beginTransaction()
                 .add(
                     R.id.fragment_container_view,
                     NextListFragment::class.java,
-                    bundleOf("qqq" to "111")
-                )
-                .addToBackStack(null)
+                    bundleOf("qqq" to "111"),
+                ).addToBackStack(null)
                 .commit()
         }
 
         binding.test1.setOnClickListener(
             OnClickCooldownListener {
                 Obsidian.execute(requireContext(), "obsidian://open?vault=Test&file=1")
-            }
+            },
         )
 
         binding.test2.setOnClickListener(
             OnClickCooldownListener {
                 Obsidian.execute(
                     requireContext(),
-                    "obsidian://new?vault=Test2&name=newitem&content=content"
+                    "obsidian://new?vault=Test2&name=newitem&content=content",
                 )
-            }
+            },
         )
 
         binding.btnAddTask.setOnClickListener(
             OnClickCooldownListener {
-                requireActivity().supportFragmentManager.beginTransaction()
+                requireActivity()
+                    .supportFragmentManager
+                    .beginTransaction()
                     .add(
                         R.id.fragment_container_view,
                         TaskAddUpdateFragment::class.java,
-                        bundleOf("qqq" to "111")
-                    )
-                    .addToBackStack(null)
+                        bundleOf("qqq" to "111"),
+                    ).addToBackStack(null)
                     .commit()
-            }
+            },
         )
     }
 

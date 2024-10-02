@@ -24,4 +24,3 @@ class ListProjectsSelectorViewHolder(
         checkImageView.changeInvisible(model.isSelected)
     }
 }
-

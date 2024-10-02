@@ -15,61 +15,59 @@ class TaskRepositoryImpl(
     private val tasksMapper: TasksMapper,
     private val dispatcherProvider: DispatcherProvider,
 ) : TaskRepository {
-
     override suspend fun insertTask(
         name: String,
         projectId: Long?,
         tagIds: List<Long>,
         description: String,
-        list: String
+        list: String,
     ) {
         withContext(dispatcherProvider.io) {
-            val taskEntity = TaskEntity(
-                name = name,
-                projectId = projectId,
-                description = description,
-                list = list
-            )
+            val taskEntity =
+                TaskEntity(
+                    name = name,
+                    projectId = projectId,
+                    description = description,
+                    list = list,
+                )
 
             if (tagIds.isEmpty()) {
                 taskDao.insertTask(taskEntity)
-
             } else {
                 taskDao.insertTaskWithTags(taskEntity, tagIds)
             }
         }
     }
 
-    override fun getTaskById(taskId: Long): Flow<TaskDomainModel?> {
-        return taskDao.getTaskWithTagsById(taskId).map { entity ->
+    override fun getTaskById(taskId: Long): Flow<TaskDomainModel?> =
+        taskDao.getTaskWithTagsById(taskId).map { entity ->
             entity?.let { tasksMapper.toModel(entity) }
         }
-    }
 
-    override fun getAllTasks(): Flow<List<TaskDomainModel>> {
-        return taskDao.getAllTasksWithTags().map { taskWithTags ->
+    override fun getAllTasks(): Flow<List<TaskDomainModel>> =
+        taskDao.getAllTasksWithTags().map { taskWithTags ->
             taskWithTags.map { tasksMapper.toModel(it) }
         }
-    }
 
-    override suspend fun updateTaskComplete(taskId: Long, isCompleted: Boolean) {
+    override suspend fun updateTaskComplete(
+        taskId: Long,
+        isCompleted: Boolean,
+    ) {
         withContext(dispatcherProvider.io) {
             taskDao.updateTaskComplete(taskId, isCompleted)
         }
     }
 
-    override fun getTasksByList(list: String): Flow<List<TaskDomainModel>> {
-        return taskDao.getTasksByList(list).map { taskWithTags ->
+    override fun getTasksByList(list: String): Flow<List<TaskDomainModel>> =
+        taskDao.getTasksByList(list).map { taskWithTags ->
             taskWithTags.map { tasksMapper.toModel(it) }
         }
-    }
 
     override fun getTasksByListAndProject(
         list: String,
-        projectId: Long
-    ): Flow<List<TaskDomainModel>> {
-        return taskDao.getTasksByListAndProject(list, projectId).map { taskWithTags ->
+        projectId: Long,
+    ): Flow<List<TaskDomainModel>> =
+        taskDao.getTasksByListAndProject(list, projectId).map { taskWithTags ->
             taskWithTags.map { tasksMapper.toModel(it) }
         }
-    }
 }

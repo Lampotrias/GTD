@@ -24,34 +24,41 @@ class InputBoxFragment : Fragment() {
     private var _binding: FragmentInputBoxBinding? = null
     private val binding get() = _binding!!
 
-    private val tasksAdapter = TaskAdapter(object : TaskEventListener {
-        override fun onTaskClick(task: TaskDomainModel) {
-            viewModel.taskClick(task)
-        }
+    private val tasksAdapter =
+        TaskAdapter(
+            object : TaskEventListener {
+                override fun onTaskClick(task: TaskDomainModel) {
+                    viewModel.taskClick(task)
+                }
 
-        override fun onTaskCompleteChange(task: TaskDomainModel) {
-            viewModel.taskCompleteChange(task)
-        }
+                override fun onTaskCompleteChange(task: TaskDomainModel) {
+                    viewModel.taskCompleteChange(task)
+                }
 
-        override fun onTaskFavoriteClick(task: TaskDomainModel) {
-            viewModel.taskFavoriteClick(task)
-        }
-    })
+                override fun onTaskFavoriteClick(task: TaskDomainModel) {
+                    viewModel.taskFavoriteClick(task)
+                }
+            },
+        )
 
     private val viewModel: InputBoxViewModel by viewModel {
         parametersOf(requireArguments().getString("qqq"))
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentInputBoxBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding.recyclerView) {
@@ -59,9 +66,9 @@ class InputBoxFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(
                 DividerItemDecoration(
-                    thickness = requireContext().dpToPx(0.5f),
-                    color = Color.GRAY
-                )
+                    thickness = requireContext().dpToPx(SEPARATOR_HEIGHT),
+                    color = Color.GRAY,
+                ),
             )
         }
 
@@ -78,5 +85,9 @@ class InputBoxFragment : Fragment() {
                 }
             }
         }
+    }
+
+    companion object {
+        private const val SEPARATOR_HEIGHT = 0.5f
     }
 }

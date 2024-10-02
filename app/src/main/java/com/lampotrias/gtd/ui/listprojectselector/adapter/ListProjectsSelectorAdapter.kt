@@ -25,22 +25,25 @@ class ListProjectsSelectorAdapter(
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
-    ): ListProjectsSelectorViewHolder {
-        return ListProjectsSelectorViewHolder(
-            LayoutInflater.from(parent.context)
+        viewType: Int,
+    ): ListProjectsSelectorViewHolder =
+        ListProjectsSelectorViewHolder(
+            LayoutInflater
+                .from(parent.context)
                 .inflate(R.layout.list_project_item_vh, parent, false),
         )
-    }
 
-    override fun getItemCount(): Int {
-        return tasks.size
-    }
+    override fun getItemCount(): Int = tasks.size
 
-    override fun onBindViewHolder(holder: ListProjectsSelectorViewHolder, position: Int) {
-        holder.itemView.setOnClickListener(OnClickCooldownListener {
-            onItemClick.invoke(tasks[position])
-        })
+    override fun onBindViewHolder(
+        holder: ListProjectsSelectorViewHolder,
+        position: Int,
+    ) {
+        holder.itemView.setOnClickListener(
+            OnClickCooldownListener {
+                onItemClick.invoke(tasks[position])
+            },
+        )
         holder.bind(tasks[position])
     }
 }

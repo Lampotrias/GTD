@@ -13,35 +13,34 @@ import kotlinx.coroutines.flow.flowOf
 class GetListsUseCase(
     @Suppress("unused") private val dispatcherProvider: DispatcherProvider,
 ) {
-    operator fun invoke(): Flow<List<ListDomainModel>> {
-        return flowOf(
+    operator fun invoke(): Flow<List<ListDomainModel>> =
+        flowOf(
             listOf(
                 ListDomainModel(
                     name = "Inbox",
                     code = LIST_INBOX,
-                    iconName = LIST_INBOX
+                    iconName = LIST_INBOX,
                 ),
                 ListDomainModel(
                     name = "Next",
                     code = LIST_NEXT,
-                    iconName = LIST_NEXT
+                    iconName = LIST_NEXT,
                 ),
                 ListDomainModel(
                     name = "Waiting",
                     code = LIST_WAITING,
-                    iconName = LIST_WAITING
+                    iconName = LIST_WAITING,
                 ),
                 ListDomainModel(
                     name = "Calendar",
                     code = LIST_CALENDAR,
-                    iconName = LIST_CALENDAR
+                    iconName = LIST_CALENDAR,
                 ),
                 ListDomainModel(
                     name = "Someday",
                     code = LIST_SOMEDAY,
-                    iconName = LIST_SOMEDAY
-                )
-            )
+                    iconName = LIST_SOMEDAY,
+                ),
+            ),
         )
-    }
 }

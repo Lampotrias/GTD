@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 data class InboxScreenUi(
     val title: String = "",
     val isLoading: Boolean = false,
-    val items: List<TaskDomainModel> = emptyList()
+    val items: List<TaskDomainModel> = emptyList(),
 )
 
 class InputBoxViewModel(
@@ -24,25 +24,26 @@ class InputBoxViewModel(
     getInboxTasksUseCase: GetInboxTasksUseCase,
     private val updateTaskCompleteUseCase: UpdateTaskCompleteUseCase,
 ) : ViewModel() {
-
     private val _isLoading = MutableStateFlow(false)
 
     val uiState: StateFlow<InboxScreenUi> =
         combine(getInboxTasksUseCase.invoke(), _isLoading) { tasks, isLoading ->
             InboxScreenUi(
                 isLoading = isLoading,
-                items = tasks
+                items = tasks,
             )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(WHILE_SUBSCRIBED_TIMEOUT),
-            initialValue = InboxScreenUi(isLoading = true)
+            initialValue = InboxScreenUi(isLoading = true),
         )
 
+    @Suppress("UNUSED_PARAMETER")
     fun taskClick(task: TaskDomainModel) {
         TODO("Not yet implemented")
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun taskFavoriteClick(task: TaskDomainModel) {
         TODO("Not yet implemented")
     }

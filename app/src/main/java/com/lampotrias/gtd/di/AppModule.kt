@@ -5,9 +5,10 @@ import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorFragment
 import org.koin.androidx.fragment.dsl.fragment
 import org.koin.dsl.module
 
-val appModule = module {
-    single<DispatcherProvider> { DefaultDispatcherProvider() }
+val AppModule =
+    module {
+        single<DispatcherProvider> { DefaultDispatcherProvider() }
 
-    fragment { InputBoxFragment() }
-    fragment { ListProjectsSelectorFragment() }
-}
+        fragment { InputBoxFragment() }
+        fragment { ListProjectsSelectorFragment() }
+    }
