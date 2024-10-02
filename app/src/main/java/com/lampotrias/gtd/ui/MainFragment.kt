@@ -13,6 +13,7 @@ import com.lampotrias.gtd.tools.obsidian.Obsidian
 import com.lampotrias.gtd.ui.addtask.TaskAddUpdateFragment
 import com.lampotrias.gtd.ui.inbox.InputBoxFragment
 import com.lampotrias.gtd.ui.next.NextListFragment
+import com.lampotrias.gtd.ui.projects.ProjectsListFragment
 
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
@@ -41,6 +42,18 @@ class MainFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+
+        binding.btnProjects.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(
+                    R.id.fragment_container_view,
+                    ProjectsListFragment::class.java,
+                    bundleOf()
+                )
+                .addToBackStack(null)
+                .commit()
+        }
+
         binding.btnNextList.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .add(
@@ -60,7 +73,10 @@ class MainFragment : Fragment() {
 
         binding.test2.setOnClickListener(
             OnClickCooldownListener {
-                Obsidian.execute(requireContext(), "obsidian://new?vault=Test2&name=newitem&content=content")
+                Obsidian.execute(
+                    requireContext(),
+                    "obsidian://new?vault=Test2&name=newitem&content=content"
+                )
             }
         )
 

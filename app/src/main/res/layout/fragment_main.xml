@@ -8,6 +8,11 @@
   android:padding="10dp"
   tools:context=".ui.MainFragment">
   <Button
+    android:id="@+id/btn_projects"
+    android:layout_width="200dp"
+    android:layout_height="50dp"
+    android:text="Open Projects list" />
+  <Button
     android:id="@+id/btn_input_box"
     android:layout_width="200dp"
     android:layout_height="50dp"
@@ -22,14 +27,11 @@
     android:layout_width="200dp"
     android:layout_height="50dp"
     android:text="Open Add Task" />
-
   <Button
     android:id="@+id/test1"
     android:layout_width="200dp"
     android:layout_height="50dp"
     android:text="test1" />
-
-
   <Button
     android:id="@+id/test2"
     android:layout_width="200dp"
