@@ -14,7 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lampotrias.gtd.R
 import com.lampotrias.gtd.databinding.FragmentProjectListBinding
-import com.lampotrias.gtd.domain.model.ProjectDomainModel
+import com.lampotrias.gtd.domain.model.ProjectWithTasksDomainModel
 import com.lampotrias.gtd.tools.dpToPx
 import com.lampotrias.gtd.ui.inbox.InputBoxFragment
 import com.lampotrias.gtd.ui.inbox.adapter.DividerItemDecoration
@@ -30,7 +30,7 @@ class ProjectsListFragment : Fragment() {
     private val tasksAdapter =
         ProjectsListAdapter(
             object : ProjectEventListener {
-                override fun onProjectClick(task: ProjectDomainModel) {
+                override fun onProjectClick(task: ProjectWithTasksDomainModel) {
                     requireActivity()
                         .supportFragmentManager
                         .beginTransaction()

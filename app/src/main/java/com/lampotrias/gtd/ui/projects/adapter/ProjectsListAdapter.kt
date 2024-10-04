@@ -5,15 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lampotrias.gtd.R
-import com.lampotrias.gtd.domain.model.ProjectDomainModel
+import com.lampotrias.gtd.domain.model.ProjectWithTasksDomainModel
 import com.lampotrias.gtd.ui.projects.ProjectEventListener
 
 class ProjectsListAdapter(
     private val listener: ProjectEventListener,
 ) : RecyclerView.Adapter<ProjectItemViewHolder>() {
-    private val tasks = mutableListOf<ProjectDomainModel>()
+    private val tasks = mutableListOf<ProjectWithTasksDomainModel>()
 
-    fun setTasks(tasks: List<ProjectDomainModel>) {
+    fun setTasks(tasks: List<ProjectWithTasksDomainModel>) {
         val productDiffResult = DiffUtil.calculateDiff(ProjectsListDiffUtil(this.tasks, tasks))
 
         this.tasks.clear()

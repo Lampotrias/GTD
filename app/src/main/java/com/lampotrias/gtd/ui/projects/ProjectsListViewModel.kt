@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lampotrias.gtd.domain.ProjectsRepository
-import com.lampotrias.gtd.domain.model.ProjectDomainModel
+import com.lampotrias.gtd.domain.model.ProjectWithTasksDomainModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 data class ProjectsListScreenUi(
     val title: String = "",
     val isLoading: Boolean = false,
-    val items: List<ProjectDomainModel> = emptyList(),
+    val items: List<ProjectWithTasksDomainModel> = emptyList(),
 )
 
 class ProjectsListViewModel(
@@ -24,7 +24,7 @@ class ProjectsListViewModel(
     private val _isLoading = MutableStateFlow(false)
 
     val uiState: StateFlow<ProjectsListScreenUi> =
-        combine(projectsRepository.getAllProjects(), _isLoading) { tasks, isLoading ->
+        combine(projectsRepository.getAllProjectsWithTasks(), _isLoading) { tasks, isLoading ->
             ProjectsListScreenUi(
                 isLoading = isLoading,
                 items = tasks,

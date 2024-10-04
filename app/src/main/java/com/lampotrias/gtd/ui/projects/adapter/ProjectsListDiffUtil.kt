@@ -1,10 +1,10 @@
 package com.lampotrias.gtd.ui.projects.adapter
 
-import com.lampotrias.gtd.domain.model.ProjectDomainModel
+import com.lampotrias.gtd.domain.model.ProjectWithTasksDomainModel
 
 class ProjectsListDiffUtil(
-    private val oldTasks: MutableList<ProjectDomainModel>,
-    private val newTasks: List<ProjectDomainModel>,
+    private val oldTasks: MutableList<ProjectWithTasksDomainModel>,
+    private val newTasks: List<ProjectWithTasksDomainModel>,
 ) : androidx.recyclerview.widget.DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldTasks.size
 

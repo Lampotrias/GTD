@@ -26,6 +26,18 @@ data class TaskWithTagsAndProjectEntity(
     val projectEntity: ProjectEntity?,
 )
 
+data class TaskWithTagsEntity(
+    @Embedded
+    val taskEntity: TaskEntity,
+    @Relation(
+        entity = TagEntity::class,
+        parentColumn = "task_id",
+        entityColumn = "tag_id",
+        associateBy = Junction(TasksTagsCrossRef::class),
+    )
+    val tags: List<TagEntityWithType>,
+)
+
 @Entity(
     tableName = "tasks_tags",
     primaryKeys = ["task_id", "tag_id"],

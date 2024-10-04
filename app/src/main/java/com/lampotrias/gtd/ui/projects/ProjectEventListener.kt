@@ -1,7 +1,7 @@
 package com.lampotrias.gtd.ui.projects
 
-import com.lampotrias.gtd.domain.model.ProjectDomainModel
+import com.lampotrias.gtd.domain.model.ProjectWithTasksDomainModel
 
 interface ProjectEventListener {
-    fun onProjectClick(task: ProjectDomainModel) = Unit
+    fun onProjectClick(task: ProjectWithTasksDomainModel) = Unit
 }
