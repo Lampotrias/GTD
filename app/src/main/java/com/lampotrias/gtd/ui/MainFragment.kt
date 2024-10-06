@@ -11,6 +11,7 @@ import com.lampotrias.gtd.databinding.FragmentMainBinding
 import com.lampotrias.gtd.tools.OnClickCooldownListener
 import com.lampotrias.gtd.tools.obsidian.Obsidian
 import com.lampotrias.gtd.ui.addtask.TaskAddUpdateFragment
+import com.lampotrias.gtd.ui.calendar.CalendarFragment
 import com.lampotrias.gtd.ui.inbox.InputBoxFragment
 import com.lampotrias.gtd.ui.next.NextListFragment
 import com.lampotrias.gtd.ui.projects.ProjectsListFragment
@@ -66,6 +67,18 @@ class MainFragment : Fragment() {
                 .add(
                     R.id.fragment_container_view,
                     NextListFragment::class.java,
+                    bundleOf("qqq" to "111"),
+                ).addToBackStack(null)
+                .commit()
+        }
+
+        binding.calendar.setOnClickListener {
+            requireActivity()
+                .supportFragmentManager
+                .beginTransaction()
+                .add(
+                    R.id.fragment_container_view,
+                    CalendarFragment::class.java,
                     bundleOf("qqq" to "111"),
                 ).addToBackStack(null)
                 .commit()
