@@ -16,7 +16,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.lampotrias.gtd.databinding.FragmentTaskAddUpdateBinding
-import com.lampotrias.gtd.domain.model.ListDomainModel
 import com.lampotrias.gtd.domain.model.TagDomainModel
 import com.lampotrias.gtd.tools.DrawableUtils
 import com.lampotrias.gtd.tools.OnClickCooldownListener
@@ -27,16 +26,18 @@ import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorFragment.Co
 import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorFragment.Companion.CURRENT_PROJECT_KEY
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.Calendar
 
 class TaskAddUpdateFragment : Fragment() {
     private var _binding: FragmentTaskAddUpdateBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: TaskAddUpdateViewModel by viewModel()
+    private val viewModel: TaskAddUpdateViewModel by viewModel {
+        parametersOf(requireArguments().getLong(TASK_ID_PARAM, 0L))
+    }
 
     private val selectedCustomTags = mutableListOf<TagDomainModel>()
-    private var currentList: ListDomainModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,13 +70,16 @@ class TaskAddUpdateFragment : Fragment() {
                             }, CLOSE_FRAGMENT_DELAY)
                         }
 
-                        if (currentList == null && uiState.lists.isNotEmpty()) {
-                            currentList = uiState.lists.first()
-                            binding.listName.text = uiState.lists.first().name
+                        uiState.currentTask?.getContentIfNotHandled()?.let {
+                            binding.editTextTaskName.setText(it.name)
+                            binding.editTextTaskDescription.setText(it.description)
+                            binding.projectName.text = it.project?.name
+                            binding.listName.text = it.list
+                        } ?: run {
+                            binding.listName.text = uiState.selectedList?.name
+                            binding.projectName.text = uiState.selectedProject?.name
                         }
 
-                        binding.listName.text = uiState.selectedList?.name
-                        binding.projectName.text = uiState.selectedProject?.name
                         binding.projectName.changeVisibility(
                             uiState.selectedProject?.name != null &&
                                 uiState.selectedProject.name.isNotBlank(),
@@ -268,6 +272,7 @@ class TaskAddUpdateFragment : Fragment() {
     }
 
     companion object {
+        const val TASK_ID_PARAM = "task_id"
         private const val BUTTON_CORNER_RADIUS = 8f
         private const val CLOSE_FRAGMENT_DELAY = 2000L
     }

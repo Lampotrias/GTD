@@ -16,7 +16,7 @@ val viewModelsModule =
         viewModel { InputBoxViewModel(get(), get(), get()) }
         viewModel { NextListViewModel(get(), get(), get()) }
         viewModel { TasksProjectViewModel(get(), get(), get()) }
-        viewModel { TaskAddUpdateViewModel(get(), get(), get(), get(), get()) }
+        viewModel { TaskAddUpdateViewModel(get(), get(), get(), get(), get(), get()) }
         viewModel { ListProjectsSelectorViewModel(get(), get(), get(), get(), get()) }
         viewModel { ProjectsListViewModel(get(), get()) }
     }

@@ -11,6 +11,7 @@ import com.lampotrias.gtd.databinding.FragmentMainBinding
 import com.lampotrias.gtd.tools.OnClickCooldownListener
 import com.lampotrias.gtd.tools.obsidian.Obsidian
 import com.lampotrias.gtd.ui.addtask.TaskAddUpdateFragment
+import com.lampotrias.gtd.ui.addtask.TaskAddUpdateFragment.Companion.TASK_ID_PARAM
 import com.lampotrias.gtd.ui.calendar.CalendarFragment
 import com.lampotrias.gtd.ui.inbox.InputBoxFragment
 import com.lampotrias.gtd.ui.next.NextListFragment
@@ -108,6 +109,24 @@ class MainFragment : Fragment() {
                         R.id.fragment_container_view,
                         TaskAddUpdateFragment::class.java,
                         bundleOf("qqq" to "111"),
+                    ).addToBackStack(null)
+                    .commit()
+            },
+        )
+
+        binding.btnEditTask.setOnClickListener(
+            OnClickCooldownListener {
+                val bundle =
+                    Bundle().apply {
+                        putLong(TASK_ID_PARAM, 1)
+                    }
+                requireActivity()
+                    .supportFragmentManager
+                    .beginTransaction()
+                    .add(
+                        R.id.fragment_container_view,
+                        TaskAddUpdateFragment::class.java,
+                        bundle,
                     ).addToBackStack(null)
                     .commit()
             },

@@ -28,6 +28,11 @@
     android:layout_height="50dp"
     android:text="Open Add Task" />
   <Button
+    android:id="@+id/btn_edit_task"
+    android:layout_width="200dp"
+    android:layout_height="50dp"
+    android:text="Open Edit Task" />
+  <Button
     android:id="@+id/test1"
     android:layout_width="200dp"
     android:layout_height="50dp"

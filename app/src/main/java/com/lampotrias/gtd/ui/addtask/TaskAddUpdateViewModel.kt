@@ -30,6 +30,7 @@ data class ScreenUI(
     val tagsDialog: SingleEvent<List<TagDomainModel>>? = null,
     val selectedList: ListDomainModel? = null,
     val selectedProject: ProjectDomainModel? = null,
+    val currentTask: SingleEvent<TaskDomainModel>? = null,
 )
 
 class TaskAddUpdateViewModel(
@@ -38,34 +39,44 @@ class TaskAddUpdateViewModel(
     private val getCustomTagsUseCase: GetCustomTagsUseCase,
     getListsUseCase: GetListsUseCase,
     projectsRepository: ProjectsRepository,
-    updatedTask: TaskDomainModel? = null,
+    updatedTaskId: Long,
 ) : ViewModel() {
-    private val _innerScreenUI =
-        MutableStateFlow(
-            ScreenUI(
-                selectedList =
-                    updatedTask?.list?.let {
-                        ListDomainModel(
-                            code = it,
-                            name = "Inbox",
-                            iconName = "",
-                        )
-                    },
-                selectedProject = updatedTask?.project,
-            ),
-        )
+    private val _innerScreenUI = MutableStateFlow(ScreenUI())
+
+    private val currentTaskFlow = taskRepository.getTaskById(updatedTaskId)
+
+    private var firstInitComplete = false
 
     val uiState: StateFlow<ScreenUI> =
         combine(
             projectsRepository.getAllProjects(),
             getListsUseCase.invoke(),
+            currentTaskFlow,
             _innerScreenUI,
-        ) { projects, lists, innerScreenUI ->
+        ) { projects, lists, currentTask, innerScreenUI ->
+            val selectedList =
+                innerScreenUI.selectedList ?: currentTask?.list?.let {
+                    ListDomainModel(
+                        name = it,
+                        code = it,
+                        iconName = TaskEntity.LIST_INBOX,
+                    )
+                }
+
             innerScreenUI.copy(
+                currentTask =
+                    if (!firstInitComplete) {
+                        currentTask?.let {
+                            firstInitComplete = true
+                            SingleEvent(it)
+                        }
+                    } else {
+                        null
+                    },
                 projects = projects,
                 lists = lists,
-                selectedList = innerScreenUI.selectedList ?: lists.firstOrNull(),
-                selectedProject = innerScreenUI.selectedProject,
+                selectedList = selectedList,
+                selectedProject = _innerScreenUI.value.selectedProject ?: currentTask?.project,
             )
         }.stateIn(
             scope = viewModelScope,
