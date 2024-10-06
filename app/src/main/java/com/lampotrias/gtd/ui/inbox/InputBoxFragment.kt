@@ -14,8 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.lampotrias.gtd.databinding.FragmentInputBoxBinding
 import com.lampotrias.gtd.domain.model.TaskDomainModel
 import com.lampotrias.gtd.tools.dpToPx
-import com.lampotrias.gtd.ui.inbox.adapter.DividerItemDecoration
-import com.lampotrias.gtd.ui.inbox.adapter.TaskAdapter
+import com.lampotrias.gtd.ui.DividerItemDecoration
+import com.lampotrias.gtd.ui.TaskEventListener
+import com.lampotrias.gtd.ui.tasksproject.adapter.TaskAdapter
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf

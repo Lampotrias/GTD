@@ -1,4 +1,4 @@
-package com.lampotrias.gtd.ui.inbox
+package com.lampotrias.gtd.ui
 
 import com.lampotrias.gtd.domain.model.TaskDomainModel
 

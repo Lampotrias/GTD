@@ -1,4 +1,4 @@
-package com.lampotrias.gtd.ui.inbox.adapter
+package com.lampotrias.gtd.ui.tasksproject.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lampotrias.gtd.R
 import com.lampotrias.gtd.domain.model.TaskDomainModel
-import com.lampotrias.gtd.ui.inbox.TaskEventListener
+import com.lampotrias.gtd.ui.TaskEventListener
 
 class TaskAdapter(
     private val listener: TaskEventListener,

@@ -1,4 +1,4 @@
-package com.lampotrias.gtd.ui.inbox.adapter
+package com.lampotrias.gtd.ui.tasksproject.adapter
 
 import android.graphics.Color
 import android.view.View

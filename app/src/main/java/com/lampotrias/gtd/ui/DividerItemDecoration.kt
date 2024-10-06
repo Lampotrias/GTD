@@ -1,4 +1,4 @@
-package com.lampotrias.gtd.ui.inbox.adapter
+package com.lampotrias.gtd.ui
 
 import android.graphics.Canvas
 import android.graphics.Paint

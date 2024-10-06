@@ -13,31 +13,35 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lampotrias.gtd.R
-import com.lampotrias.gtd.databinding.FragmentProjectListBinding
+import com.lampotrias.gtd.databinding.FragmentTasksProjectBinding
 import com.lampotrias.gtd.domain.model.ProjectWithTasksDomainModel
 import com.lampotrias.gtd.tools.dpToPx
-import com.lampotrias.gtd.ui.inbox.InputBoxFragment
-import com.lampotrias.gtd.ui.inbox.adapter.DividerItemDecoration
+import com.lampotrias.gtd.ui.DividerItemDecoration
 import com.lampotrias.gtd.ui.projects.adapter.ProjectsListAdapter
+import com.lampotrias.gtd.ui.tasksproject.TasksProjectFragment
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class ProjectsListFragment : Fragment() {
-    private var _binding: FragmentProjectListBinding? = null
+    private var _binding: FragmentTasksProjectBinding? = null
     private val binding get() = _binding!!
 
     private val tasksAdapter =
         ProjectsListAdapter(
             object : ProjectEventListener {
-                override fun onProjectClick(task: ProjectWithTasksDomainModel) {
+                override fun onProjectClick(project: ProjectWithTasksDomainModel) {
+                    val bundle =
+                        bundleOf().apply {
+                            putLong(TasksProjectFragment.PROJECT_KEY, project.id)
+                        }
                     requireActivity()
                         .supportFragmentManager
                         .beginTransaction()
                         .add(
                             R.id.fragment_container_view,
-                            InputBoxFragment::class.java,
-                            bundleOf("qqq" to "111"),
+                            TasksProjectFragment::class.java,
+                            bundle,
                         ).addToBackStack(null)
                         .commit()
                 }
@@ -53,7 +57,7 @@ class ProjectsListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentProjectListBinding.inflate(inflater, container, false)
+        _binding = FragmentTasksProjectBinding.inflate(inflater, container, false)
 
         return binding.root
     }
