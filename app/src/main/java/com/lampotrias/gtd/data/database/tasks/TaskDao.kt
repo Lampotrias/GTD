@@ -9,15 +9,23 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTask(task: TaskEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateTask(task: TaskEntity): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTagCrossRef(crossRef: TasksTagsCrossRef)
 
+    @Query("DELETE FROM tasks_tags WHERE task_id = :taskId")
+    suspend fun deleteTagCrossRef(taskId: Long)
+
     @Transaction
-    suspend fun insertTaskWithTags(task: TaskEntity, tagIds: List<Long>) {
+    suspend fun insertTaskWithTags(
+        task: TaskEntity,
+        tagIds: List<Long>,
+    ) {
         val taskId = insertTask(task)
 
         tagIds.forEach { tagId ->
@@ -46,14 +54,19 @@ interface TaskDao {
     fun selectTasksInProject(projectId: Long): Flow<List<TaskWithTagsAndProjectEntity>>
 
     @Query("UPDATE tasks SET is_completed = :completed WHERE task_id = :taskId")
-    fun updateTaskComplete(taskId: Long, completed: Boolean)
+    fun updateTaskComplete(
+        taskId: Long,
+        completed: Boolean,
+    )
 
+    @Transaction
     @Query("SELECT * FROM tasks WHERE list = :list")
     fun getTasksByList(list: String): Flow<List<TaskWithTagsAndProjectEntity>>
 
+    @Transaction
     @Query("SELECT * FROM tasks WHERE list = :list AND project_id = :projectId")
     fun getTasksByListAndProject(
         list: String,
-        projectId: Long
+        projectId: Long,
     ): Flow<List<TaskWithTagsAndProjectEntity>>
 }

@@ -20,7 +20,7 @@ data class TaskEntity(
     val isCompleted: Boolean = false,
 ) {
     companion object {
-        const val LIST_INBOX = ""
+        const val LIST_INBOX = "inbox"
         const val LIST_NEXT = "next"
         const val LIST_WAITING = "waiting"
         const val LIST_CALENDAR = "calendar"

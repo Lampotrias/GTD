@@ -9,6 +9,7 @@ import com.lampotrias.gtd.domain.TaskRepository
 import com.lampotrias.gtd.domain.model.ListDomainModel
 import com.lampotrias.gtd.domain.model.ProjectDomainModel
 import com.lampotrias.gtd.domain.model.TagDomainModel
+import com.lampotrias.gtd.domain.model.TaskAddUpdateModel
 import com.lampotrias.gtd.domain.model.TaskDomainModel
 import com.lampotrias.gtd.domain.usecases.GetCustomTagsUseCase
 import com.lampotrias.gtd.domain.usecases.GetListsUseCase
@@ -71,7 +72,7 @@ class TaskAddUpdateViewModel(
                             SingleEvent(it)
                         }
                     } else {
-                        null
+                        null // !!!!!
                     },
                 projects = projects,
                 lists = lists,
@@ -87,6 +88,7 @@ class TaskAddUpdateViewModel(
     fun saveTask(
         name: String,
         description: String,
+        isCompleted: Boolean,
         selectedCustomTags: MutableList<TagDomainModel>,
     ) {
         _innerScreenUI.value = _innerScreenUI.value.copy(isLoading = true)
@@ -94,13 +96,46 @@ class TaskAddUpdateViewModel(
         viewModelScope.launch {
             delay(FAKE_DELAY)
             taskRepository.insertTask(
-                name,
-                uiState.value.selectedProject?.id,
-                selectedCustomTags.map { it.id },
-                description,
-                uiState.value.selectedList?.code ?: TaskEntity.LIST_INBOX,
+                TaskAddUpdateModel(
+                    name = name,
+                    projectId = uiState.value.selectedProject?.id,
+                    tagIds = selectedCustomTags.map { it.id },
+                    description = description,
+                    list = uiState.value.selectedList?.code ?: TaskEntity.LIST_INBOX,
+                    isCompleted = isCompleted,
+                ),
             )
 
+            _innerScreenUI.value =
+                _innerScreenUI.value.copy(
+                    data = "Задача успешно добавлена",
+                    isLoading = false,
+                )
+        }
+    }
+
+    fun updateTask(
+        taskId: Long,
+        name: String,
+        description: String,
+        isCompleted: Boolean,
+        selectedCustomTags: MutableList<TagDomainModel>,
+    ) {
+        _innerScreenUI.value = _innerScreenUI.value.copy(isLoading = true)
+        viewModelScope.launch {
+            delay(FAKE_DELAY)
+
+            taskRepository.updateTask(
+                TaskAddUpdateModel(
+                    taskId = taskId,
+                    name = name,
+                    projectId = uiState.value.selectedProject?.id,
+                    tagIds = selectedCustomTags.map { it.id },
+                    description = description,
+                    list = uiState.value.selectedList?.code ?: TaskEntity.LIST_INBOX,
+                    isCompleted = isCompleted,
+                ),
+            )
             _innerScreenUI.value =
                 _innerScreenUI.value.copy(
                     data = "Задача успешно добавлена",
@@ -132,7 +167,7 @@ class TaskAddUpdateViewModel(
     }
 
     companion object {
-        private const val FAKE_DELAY = 500L
+        private const val FAKE_DELAY = 300L
         private const val WHILE_SUBSCRIBED_TIMEOUT = 5000L
     }
 }

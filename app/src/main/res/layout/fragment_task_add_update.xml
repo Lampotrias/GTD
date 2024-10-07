@@ -6,6 +6,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="#EFEEEE"
+  android:clickable="true"
   android:padding="10dp"
   tools:context=".ui.addtask.TaskAddUpdateFragment">
   <com.google.android.material.textfield.TextInputLayout
@@ -68,8 +69,8 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textSize="15sp"
         android:textColor="#333"
+        android:textSize="15sp"
         tools:text="Next" />
       <TextView
         android:id="@+id/project_name"
@@ -168,4 +169,13 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toEndOf="@+id/btn_notification"
     app:layout_constraintTop_toBottomOf="@+id/list_container" />
+  <CheckBox
+    android:id="@+id/completed_checkbox"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:checkMark="@drawable/ic_check"
+    android:text="Completed?"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/btn_tag" />
 </androidx.constraintlayout.widget.ConstraintLayout>

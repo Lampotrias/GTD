@@ -33,8 +33,13 @@ class TaskAddUpdateFragment : Fragment() {
     private var _binding: FragmentTaskAddUpdateBinding? = null
     private val binding get() = _binding!!
 
+    private var editTaskId = 0L
+    private val isUpdateMode: Boolean
+        get() = editTaskId != 0L
+
     private val viewModel: TaskAddUpdateViewModel by viewModel {
-        parametersOf(requireArguments().getLong(TASK_ID_PARAM, 0L))
+        editTaskId = requireArguments().getLong(TASK_ID_PARAM, 0L)
+        parametersOf(editTaskId)
     }
 
     private val selectedCustomTags = mutableListOf<TagDomainModel>()
@@ -75,6 +80,7 @@ class TaskAddUpdateFragment : Fragment() {
                             binding.editTextTaskDescription.setText(it.description)
                             binding.projectName.text = it.project?.name
                             binding.listName.text = it.list
+                            binding.completedCheckbox.isChecked = it.isCompleted
                         } ?: run {
                             binding.listName.text = uiState.selectedList?.name
                             binding.projectName.text = uiState.selectedProject?.name
@@ -139,7 +145,18 @@ class TaskAddUpdateFragment : Fragment() {
             OnClickCooldownListener {
                 val name = binding.editTextTaskName.text.toString()
                 val description = binding.editTextTaskDescription.text.toString()
-                viewModel.saveTask(name, description, selectedCustomTags)
+                val isCompleted = binding.completedCheckbox.isChecked
+                if (isUpdateMode) {
+                    viewModel.updateTask(
+                        editTaskId,
+                        name,
+                        description,
+                        isCompleted,
+                        selectedCustomTags,
+                    )
+                } else {
+                    viewModel.saveTask(name, description, isCompleted, selectedCustomTags)
+                }
             },
         )
 

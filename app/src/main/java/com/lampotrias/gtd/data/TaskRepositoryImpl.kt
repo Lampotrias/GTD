@@ -5,6 +5,7 @@ import com.lampotrias.gtd.data.database.tasks.TaskEntity
 import com.lampotrias.gtd.di.DispatcherProvider
 import com.lampotrias.gtd.domain.TaskRepository
 import com.lampotrias.gtd.domain.mappers.TasksMapper
+import com.lampotrias.gtd.domain.model.TaskAddUpdateModel
 import com.lampotrias.gtd.domain.model.TaskDomainModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -15,26 +16,42 @@ class TaskRepositoryImpl(
     private val tasksMapper: TasksMapper,
     private val dispatcherProvider: DispatcherProvider,
 ) : TaskRepository {
-    override suspend fun insertTask(
-        name: String,
-        projectId: Long?,
-        tagIds: List<Long>,
-        description: String,
-        list: String,
-    ) {
+    override suspend fun insertTask(taskAddUpdateModel: TaskAddUpdateModel) {
         withContext(dispatcherProvider.io) {
             val taskEntity =
                 TaskEntity(
-                    name = name,
-                    projectId = projectId,
-                    description = description,
-                    list = list,
+                    name = taskAddUpdateModel.name,
+                    projectId = taskAddUpdateModel.projectId,
+                    description = taskAddUpdateModel.description,
+                    list = taskAddUpdateModel.list,
                 )
 
-            if (tagIds.isEmpty()) {
+            if (taskAddUpdateModel.tagIds.isEmpty()) {
                 taskDao.insertTask(taskEntity)
             } else {
-                taskDao.insertTaskWithTags(taskEntity, tagIds)
+                taskDao.insertTaskWithTags(taskEntity, taskAddUpdateModel.tagIds)
+            }
+        }
+    }
+
+    override suspend fun updateTask(taskAddUpdateModel: TaskAddUpdateModel) {
+        withContext(dispatcherProvider.io) {
+            val taskEntity =
+                TaskEntity(
+                    id = taskAddUpdateModel.taskId,
+                    name = taskAddUpdateModel.name,
+                    projectId = taskAddUpdateModel.projectId,
+                    description = taskAddUpdateModel.description,
+                    list = taskAddUpdateModel.list,
+                    isCompleted = taskAddUpdateModel.isCompleted,
+                )
+
+            taskDao.deleteTagCrossRef(taskAddUpdateModel.taskId)
+
+            if (taskAddUpdateModel.tagIds.isEmpty()) {
+                taskDao.insertTask(taskEntity)
+            } else {
+                taskDao.insertTaskWithTags(taskEntity, taskAddUpdateModel.tagIds)
             }
         }
     }

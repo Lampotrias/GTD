@@ -1,5 +1,6 @@
 package com.lampotrias.gtd.domain
 
+import com.lampotrias.gtd.domain.model.TaskAddUpdateModel
 import com.lampotrias.gtd.domain.model.TaskDomainModel
 import kotlinx.coroutines.flow.Flow
 
@@ -20,11 +21,7 @@ interface TaskRepository {
 
     fun getTaskById(taskId: Long): Flow<TaskDomainModel?>
 
-    suspend fun insertTask(
-        name: String,
-        projectId: Long?,
-        tagIds: List<Long>,
-        description: String,
-        list: String,
-    )
+    suspend fun updateTask(taskAddUpdateModel: TaskAddUpdateModel)
+
+    suspend fun insertTask(taskAddUpdateModel: TaskAddUpdateModel)
 }

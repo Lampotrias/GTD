@@ -118,7 +118,7 @@ class MainFragment : Fragment() {
             OnClickCooldownListener {
                 val bundle =
                     Bundle().apply {
-                        putLong(TASK_ID_PARAM, 1)
+                        putLong(TASK_ID_PARAM, 4)
                     }
                 requireActivity()
                     .supportFragmentManager
