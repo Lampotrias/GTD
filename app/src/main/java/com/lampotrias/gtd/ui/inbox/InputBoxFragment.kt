@@ -11,11 +11,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.lampotrias.gtd.R
 import com.lampotrias.gtd.databinding.FragmentInputBoxBinding
 import com.lampotrias.gtd.domain.model.TaskDomainModel
 import com.lampotrias.gtd.tools.dpToPx
 import com.lampotrias.gtd.ui.DividerItemDecoration
 import com.lampotrias.gtd.ui.TaskEventListener
+import com.lampotrias.gtd.ui.addtask.TaskAddUpdateFragment
+import com.lampotrias.gtd.ui.addtask.TaskAddUpdateFragment.Companion.TASK_ID_PARAM
 import com.lampotrias.gtd.ui.tasksproject.adapter.TaskAdapter
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,7 +32,19 @@ class InputBoxFragment : Fragment() {
         TaskAdapter(
             object : TaskEventListener {
                 override fun onTaskClick(task: TaskDomainModel) {
-                    viewModel.taskClick(task)
+                    val bundle =
+                        Bundle().apply {
+                            putLong(TASK_ID_PARAM, task.id)
+                        }
+                    requireActivity()
+                        .supportFragmentManager
+                        .beginTransaction()
+                        .add(
+                            R.id.fragment_container_view,
+                            TaskAddUpdateFragment::class.java,
+                            bundle,
+                        ).addToBackStack(null)
+                        .commit()
                 }
 
                 override fun onTaskCompleteChange(task: TaskDomainModel) {
