@@ -57,6 +57,7 @@
       android:layout_width="20dp"
       android:layout_height="20dp"
       android:layout_marginStart="30dp"
+      android:importantForAccessibility="no"
       android:src="@drawable/outline_alarm_24" />
     <LinearLayout
       android:layout_width="match_parent"
@@ -129,8 +130,17 @@
     android:layout_height="32dp"
     android:importantForAccessibility="no"
     android:src="@drawable/outline_alarm_24"
-    app:layout_constraintEnd_toStartOf="@+id/btn_energy"
+    app:layout_constraintEnd_toStartOf="@+id/btn_priority"
     app:layout_constraintStart_toEndOf="@+id/btn_tag"
+    app:layout_constraintTop_toTopOf="@+id/btn_cycle" />
+  <ImageButton
+    android:id="@+id/btn_priority"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:importantForAccessibility="no"
+    android:src="@drawable/ic_priority"
+    app:layout_constraintEnd_toStartOf="@+id/btn_energy"
+    app:layout_constraintStart_toEndOf="@+id/btn_time"
     app:layout_constraintTop_toTopOf="@+id/btn_cycle" />
   <ImageButton
     android:id="@+id/btn_energy"
@@ -139,7 +149,7 @@
     android:importantForAccessibility="no"
     android:src="@drawable/outline_battery_charging_full_24"
     app:layout_constraintEnd_toStartOf="@+id/btn_due"
-    app:layout_constraintStart_toEndOf="@+id/btn_time"
+    app:layout_constraintStart_toEndOf="@+id/btn_priority"
     app:layout_constraintTop_toTopOf="@+id/btn_cycle" />
   <ImageButton
     android:id="@+id/btn_due"
@@ -178,4 +188,39 @@
     android:text="Completed?"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/btn_tag" />
+  <TextView
+    android:id="@+id/tags_list"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toTopOf="@+id/tags_energy"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/completed_checkbox"
+    tools:text="Tags: " />
+  <TextView
+    android:id="@+id/tags_energy"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toTopOf="@+id/tags_priority"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/tags_list"
+    tools:text="Energy: " />
+  <TextView
+    android:id="@+id/tags_priority"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toTopOf="@+id/tags_time"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/tags_energy"
+    tools:text="Priority: " />
+  <TextView
+    android:id="@+id/tags_time"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/tags_priority"
+    tools:text="Time: " />
 </androidx.constraintlayout.widget.ConstraintLayout>

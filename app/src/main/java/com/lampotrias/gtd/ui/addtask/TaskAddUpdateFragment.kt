@@ -1,5 +1,6 @@
 package com.lampotrias.gtd.ui.addtask
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -42,8 +43,6 @@ class TaskAddUpdateFragment : Fragment() {
         parametersOf(editTaskId)
     }
 
-    private val selectedCustomTags = mutableListOf<TagDomainModel>()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,6 +53,7 @@ class TaskAddUpdateFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -91,6 +91,16 @@ class TaskAddUpdateFragment : Fragment() {
                                 uiState.selectedProject.name.isNotBlank(),
                         )
 
+                        binding.tagsList.text =
+                            "Теги: ${
+                                uiState.selectedCustomTags?.joinToString(", ") { it.name }
+                            }"
+
+                        binding.tagsTime.text = "Время: ${uiState.selectedTimeTag?.name}"
+                        binding.tagsEnergy.text = "Энергия: ${uiState.selectedEnergyTags?.name}"
+                        binding.tagsPriority.text =
+                            "Приоритет: ${uiState.selectedPriorityTags?.name}"
+
                         binding.listContainer.setOnClickListener(
                             OnClickCooldownListener {
                                 val dialog =
@@ -125,6 +135,18 @@ class TaskAddUpdateFragment : Fragment() {
                         uiState.tagsDialog?.getContentIfNotHandled()?.let {
                             showSelectTagsDialog(it)
                         }
+
+                        uiState.priorityDialog?.getContentIfNotHandled()?.let {
+                            showSelectPriorityDialog(it)
+                        }
+
+                        uiState.timeDialog?.getContentIfNotHandled()?.let {
+                            showSelectTimeDialog(it)
+                        }
+
+                        uiState.energyDialog?.getContentIfNotHandled()?.let {
+                            showSelectEnergyDialog(it)
+                        }
                     }
                 }
             }
@@ -137,6 +159,7 @@ class TaskAddUpdateFragment : Fragment() {
         binding.btnTag.background = createButtonBackground()
         binding.btnTime.background = createButtonBackground()
         binding.btnEnergy.background = createButtonBackground()
+        binding.btnPriority.background = createButtonBackground()
         binding.btnDue.background = createButtonBackground()
         binding.btnNotification.background = createButtonBackground()
         binding.btnCycle.background = createButtonBackground()
@@ -152,10 +175,9 @@ class TaskAddUpdateFragment : Fragment() {
                         name,
                         description,
                         isCompleted,
-                        selectedCustomTags,
                     )
                 } else {
-                    viewModel.saveTask(name, description, isCompleted, selectedCustomTags)
+                    viewModel.saveTask(name, description, isCompleted)
                 }
             },
         )
@@ -175,23 +197,19 @@ class TaskAddUpdateFragment : Fragment() {
 
         binding.btnEnergy.setOnClickListener(
             OnClickCooldownListener {
-                showSelectDialog(
-                    title = "Нужно энергии",
-                    items = listOf("мало энергии", "среднее количество", "много энергии"),
-                    onItemSelected = { position, value ->
-                    },
-                )
+                viewModel.clickOpenDialogEnergy()
+            },
+        )
+
+        binding.btnPriority.setOnClickListener(
+            OnClickCooldownListener {
+                viewModel.clickOpenDialogPriority()
             },
         )
 
         binding.btnTime.setOnClickListener(
             OnClickCooldownListener {
-                showSelectDialog(
-                    title = "Время на задачу",
-                    items = listOf("5 минут", "10 минут", "15 минут", "30 минут"),
-                    onItemSelected = { position, value ->
-                    },
-                )
+                viewModel.clickOpenDialogTime()
             },
         )
 
@@ -217,10 +235,41 @@ class TaskAddUpdateFragment : Fragment() {
             title = "Теги",
             items = tags.map { it.name },
             onItemSelected = { selectedTags ->
-                selectedCustomTags.clear()
-                selectedTags.forEach { (index, _) ->
-                    selectedCustomTags.add(tags[index])
-                }
+                viewModel.selectCustomTags(
+                    tags.filterIndexed { index, _ ->
+                        selectedTags.contains(index)
+                    },
+                )
+            },
+        )
+    }
+
+    private fun showSelectTimeDialog(tags: List<TagDomainModel>) {
+        showSelectDialog(
+            title = "Время на задачу",
+            items = tags.map { it.name },
+            onItemSelected = { selectedPosition ->
+                viewModel.selectTimeTags(tags[selectedPosition])
+            },
+        )
+    }
+
+    private fun showSelectEnergyDialog(tags: List<TagDomainModel>) {
+        showSelectDialog(
+            title = "Теги",
+            items = tags.map { it.name },
+            onItemSelected = { selectedPosition ->
+                viewModel.selectEnergyTags(tags[selectedPosition])
+            },
+        )
+    }
+
+    private fun showSelectPriorityDialog(tags: List<TagDomainModel>) {
+        showSelectDialog(
+            title = "Теги",
+            items = tags.map { it.name },
+            onItemSelected = { selectedPosition ->
+                viewModel.selectPriorityTags(tags[selectedPosition])
             },
         )
     }
@@ -228,7 +277,7 @@ class TaskAddUpdateFragment : Fragment() {
     private fun showSelectDialog(
         title: String,
         items: List<String>,
-        onItemSelected: (Int, String) -> Unit,
+        onItemSelected: (Int) -> Unit,
     ) {
         val itemsArray = items.toTypedArray()
 
@@ -236,9 +285,8 @@ class TaskAddUpdateFragment : Fragment() {
             .Builder(requireContext())
             .setTitle(title)
             .setItems(itemsArray) { dialog, which ->
-                val selectedItem = items[which]
                 dialog.dismiss()
-                onItemSelected(which, selectedItem)
+                onItemSelected(which)
             }.setNegativeButton("Отмена") { dialog, _ ->
                 dialog.dismiss()
             }.show()

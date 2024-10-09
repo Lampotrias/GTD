@@ -1,6 +1,10 @@
 package com.lampotrias.gtd.domain.mappers
 
 import com.lampotrias.gtd.data.database.projects.ProjectWithTasksEntity
+import com.lampotrias.gtd.data.database.tags.TagEntityWithType
+import com.lampotrias.gtd.data.database.tagtypes.TagTypeEntity.Companion.ENERGY_TAG_TYPE_ID
+import com.lampotrias.gtd.data.database.tagtypes.TagTypeEntity.Companion.PRIORITY_TAG_TYPE_ID
+import com.lampotrias.gtd.data.database.tagtypes.TagTypeEntity.Companion.TIME_TAG_TYPE_ID
 import com.lampotrias.gtd.data.database.tasks.TaskWithTagsEntity
 import com.lampotrias.gtd.domain.model.ProjectDomainModel
 import com.lampotrias.gtd.domain.model.ProjectWithTasksDomainModel
@@ -29,22 +33,37 @@ class ProjectTaskMapper(
             id = taskEntity.taskEntity.id,
             name = taskEntity.taskEntity.name,
             project = projectDomainModel,
-            tags = tagToDomainModel(taskEntity),
+            customTags = tagToDomainModels(taskEntity),
             list = taskEntity.taskEntity.list,
             description = taskEntity.taskEntity.description,
             isCompleted = taskEntity.taskEntity.isCompleted,
+            time =
+                taskEntity.tags
+                    .firstOrNull { it.tagType.id == TIME_TAG_TYPE_ID }
+                    ?.let { tagToDomainModel(it) },
+            priority =
+                taskEntity.tags
+                    .firstOrNull { it.tagType.id == PRIORITY_TAG_TYPE_ID }
+                    ?.let { tagToDomainModel(it) },
+            energy =
+                taskEntity.tags
+                    .firstOrNull { it.tagType.id == ENERGY_TAG_TYPE_ID }
+                    ?.let { tagToDomainModel(it) },
         )
     }
 
-    private fun tagToDomainModel(taskEntity: TaskWithTagsEntity) =
+    private fun tagToDomainModels(taskEntity: TaskWithTagsEntity) =
         taskEntity.tags.map {
-            TagDomainModel(
-                id = it.tag.id,
-                name = it.tag.name,
-                iconName = it.tag.iconName,
-                type = tagTypeMapper.toModel(it.tagType),
-            )
+            tagToDomainModel(it)
         }
+
+    private fun tagToDomainModel(entity: TagEntityWithType) =
+        TagDomainModel(
+            id = entity.tag.id,
+            name = entity.tag.name,
+            iconName = entity.tag.iconName,
+            type = tagTypeMapper.toModel(entity.tagType),
+        )
 
     override fun toEntity(model: ProjectWithTasksDomainModel): ProjectWithTasksEntity {
         TODO("Not yet implemented")

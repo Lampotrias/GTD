@@ -21,14 +21,9 @@ val databaseModule =
                     object : RoomDatabase.Callback() {
                         override fun onOpen(connection: SQLiteConnection) {
                             super.onOpen(connection)
-                            try {
-                                connection.execSQL("INSERT INTO `tag_types` (`id`, `tag_type_name`) VALUES (1, 'Time')")
-                            } catch (ex: Exception) {
-                                ex.printStackTrace()
-                            }
 
                             try {
-                                connection.execSQL("INSERT INTO `tag_types` (`id`, `tag_type_name`) VALUES (2, 'Priority')")
+                                connection.execSQL("INSERT INTO `tag_types` (`id`, `tag_type_name`) VALUES (4, 'Свои теги')")
                             } catch (ex: Exception) {
                                 ex.printStackTrace()
                             }
@@ -36,7 +31,7 @@ val databaseModule =
                             try {
                                 connection.execSQL(
                                     "INSERT INTO `tags` (`tag_id`, `tag_name`, `type_id`, `icon_name`) " +
-                                        "VALUES (1, 'tag 1 type 1', 1, 'tag 1 type 1 icon')",
+                                        "VALUES (10, 'тег 1', 4, 'tag 1 type 1 icon')",
                                 )
                             } catch (ex: Exception) {
                                 ex.printStackTrace()
@@ -45,7 +40,7 @@ val databaseModule =
                             try {
                                 connection.execSQL(
                                     "INSERT INTO `tags` (`tag_id`, `tag_name`, `type_id`, `icon_name`) " +
-                                        "VALUES (2, 'tag 2 type 1', 1, 'tag 2 type 1 icon 2')",
+                                        "VALUES (11, 'тег 2', 4, 'tag 1 type 1 icon')",
                                 )
                             } catch (ex: Exception) {
                                 ex.printStackTrace()
@@ -54,7 +49,22 @@ val databaseModule =
                             try {
                                 connection.execSQL(
                                     "INSERT INTO `tags` (`tag_id`, `tag_name`, `type_id`, `icon_name`) " +
-                                        "VALUES (3, 'tag 3 type 2', 2, 'tag 3 type 2 icon 1')",
+                                        "VALUES (12, 'тег 3', 4, 'tag 1 type 1 icon')",
+                                )
+                            } catch (ex: Exception) {
+                                ex.printStackTrace()
+                            }
+
+                            try {
+                                connection.execSQL("INSERT INTO `tag_types` (`id`, `tag_type_name`) VALUES (1, 'Время выполнения')")
+                            } catch (ex: Exception) {
+                                ex.printStackTrace()
+                            }
+
+                            try {
+                                connection.execSQL(
+                                    "INSERT INTO `tags` (`tag_id`, `tag_name`, `type_id`, `icon_name`) " +
+                                        "VALUES (1, '5 минут', 1, 'tag 1 type 1 icon')",
                                 )
                             } catch (ex: Exception) {
                                 ex.printStackTrace()
@@ -63,7 +73,82 @@ val databaseModule =
                             try {
                                 connection.execSQL(
                                     "INSERT INTO `tags` (`tag_id`, `tag_name`, `type_id`, `icon_name`) " +
-                                        "VALUES (4, 'tag 4 type 2', 2, 'tag 4 type 2 icon 2')",
+                                        "VALUES (2, '15 минут', 1, 'tag 1 type 1 icon')",
+                                )
+                            } catch (ex: Exception) {
+                                ex.printStackTrace()
+                            }
+
+                            try {
+                                connection.execSQL(
+                                    "INSERT INTO `tags` (`tag_id`, `tag_name`, `type_id`, `icon_name`) " +
+                                        "VALUES (3, '30 минут', 1, 'tag 1 type 1 icon')",
+                                )
+                            } catch (ex: Exception) {
+                                ex.printStackTrace()
+                            }
+
+                            try {
+                                connection.execSQL("INSERT INTO `tag_types` (`id`, `tag_type_name`) VALUES (2, 'Приоритет')")
+                            } catch (ex: Exception) {
+                                ex.printStackTrace()
+                            }
+
+                            try {
+                                connection.execSQL(
+                                    "INSERT INTO `tags` (`tag_id`, `tag_name`, `type_id`, `icon_name`) " +
+                                            "VALUES (4, 'Низкий', 2, 'tag 1 type 1 icon')",
+                                )
+                            } catch (ex: Exception) {
+                                ex.printStackTrace()
+                            }
+
+                            try {
+                                connection.execSQL(
+                                    "INSERT INTO `tags` (`tag_id`, `tag_name`, `type_id`, `icon_name`) " +
+                                            "VALUES (5, 'Средний', 2, 'tag 1 type 1 icon')",
+                                )
+                            } catch (ex: Exception) {
+                                ex.printStackTrace()
+                            }
+
+                            try {
+                                connection.execSQL(
+                                    "INSERT INTO `tags` (`tag_id`, `tag_name`, `type_id`, `icon_name`) " +
+                                            "VALUES (6, 'Высокий', 2, 'tag 1 type 1 icon')",
+                                )
+                            } catch (ex: Exception) {
+                                ex.printStackTrace()
+                            }
+
+                            try {
+                                connection.execSQL("INSERT INTO `tag_types` (`id`, `tag_type_name`) VALUES (3, 'Энергия')")
+                            } catch (ex: Exception) {
+                                ex.printStackTrace()
+                            }
+
+                            try {
+                                connection.execSQL(
+                                    "INSERT INTO `tags` (`tag_id`, `tag_name`, `type_id`, `icon_name`) " +
+                                        "VALUES (7, 'Мало энергии', 3, 'tag 1 type 1 icon')",
+                                )
+                            } catch (ex: Exception) {
+                                ex.printStackTrace()
+                            }
+
+                            try {
+                                connection.execSQL(
+                                    "INSERT INTO `tags` (`tag_id`, `tag_name`, `type_id`, `icon_name`) " +
+                                        "VALUES (8, 'Среднее количество', 3, 'tag 1 type 1 icon')",
+                                )
+                            } catch (ex: Exception) {
+                                ex.printStackTrace()
+                            }
+
+                            try {
+                                connection.execSQL(
+                                    "INSERT INTO `tags` (`tag_id`, `tag_name`, `type_id`, `icon_name`) " +
+                                        "VALUES (9, 'Много энергии', 3, 'tag 1 type 1 icon')",
                                 )
                             } catch (ex: Exception) {
                                 ex.printStackTrace()

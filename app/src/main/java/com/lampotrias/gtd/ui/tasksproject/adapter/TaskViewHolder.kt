@@ -34,7 +34,7 @@ class TaskViewHolder(
         checkBoxView.isChecked = task.isCompleted
 
         tagsContainer.removeAllViews()
-        task.tags.forEachIndexed { index, tag ->
+        task.customTags.forEachIndexed { index, tag ->
             val tagView =
                 TagView(itemView.context).apply {
                     text = tag.name
@@ -77,6 +77,6 @@ class TaskViewHolder(
             },
         )
 
-        tagsContainer.changeVisibility(task.tags.isNotEmpty())
+        tagsContainer.changeVisibility(task.customTags.isNotEmpty())
     }
 }

@@ -1,17 +1,17 @@
 package com.lampotrias.gtd.domain.usecases
 
-import com.lampotrias.gtd.data.database.tagtypes.TagTypeEntity.Companion.CUSTOM_TAG_TYPE_ID
+import com.lampotrias.gtd.data.database.tagtypes.TagTypeEntity.Companion.TIME_TAG_TYPE_ID
 import com.lampotrias.gtd.di.DispatcherProvider
 import com.lampotrias.gtd.domain.TagsRepository
 import com.lampotrias.gtd.domain.model.TagDomainModel
 import kotlinx.coroutines.withContext
 
-class GetCustomTagsUseCase(
+class GetTimeTagsUseCase(
     private val tagsRepository: TagsRepository,
     private val dispatcherProvider: DispatcherProvider,
 ) {
     suspend operator fun invoke(): List<TagDomainModel> =
         withContext(dispatcherProvider.io) {
-            tagsRepository.getTagsByTypeId(CUSTOM_TAG_TYPE_ID)
+            tagsRepository.getTagsByTypeId(TIME_TAG_TYPE_ID)
         }
 }

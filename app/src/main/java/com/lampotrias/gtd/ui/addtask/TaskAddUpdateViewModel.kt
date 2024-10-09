@@ -12,7 +12,10 @@ import com.lampotrias.gtd.domain.model.TagDomainModel
 import com.lampotrias.gtd.domain.model.TaskAddUpdateModel
 import com.lampotrias.gtd.domain.model.TaskDomainModel
 import com.lampotrias.gtd.domain.usecases.GetCustomTagsUseCase
+import com.lampotrias.gtd.domain.usecases.GetEnergyTagsUseCase
 import com.lampotrias.gtd.domain.usecases.GetListsUseCase
+import com.lampotrias.gtd.domain.usecases.GetPriorityTagsUseCase
+import com.lampotrias.gtd.domain.usecases.GetTimeTagsUseCase
 import com.lampotrias.gtd.tools.SingleEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,15 +32,25 @@ data class ScreenUI(
     val projects: List<ProjectDomainModel> = emptyList(),
     val errorMessage: String? = null,
     val tagsDialog: SingleEvent<List<TagDomainModel>>? = null,
+    val timeDialog: SingleEvent<List<TagDomainModel>>? = null,
+    val priorityDialog: SingleEvent<List<TagDomainModel>>? = null,
+    val energyDialog: SingleEvent<List<TagDomainModel>>? = null,
     val selectedList: ListDomainModel? = null,
     val selectedProject: ProjectDomainModel? = null,
     val currentTask: SingleEvent<TaskDomainModel>? = null,
+    val selectedCustomTags: List<TagDomainModel>? = null,
+    val selectedTimeTag: TagDomainModel? = null,
+    val selectedPriorityTags: TagDomainModel? = null,
+    val selectedEnergyTags: TagDomainModel? = null,
 )
 
 class TaskAddUpdateViewModel(
     @Suppress("unused") private val handle: SavedStateHandle,
     private val taskRepository: TaskRepository,
     private val getCustomTagsUseCase: GetCustomTagsUseCase,
+    private val getTimeTagsUseCase: GetTimeTagsUseCase,
+    private val priorityTagsUseCase: GetPriorityTagsUseCase,
+    private val getEnergyTagsUseCase: GetEnergyTagsUseCase,
     getListsUseCase: GetListsUseCase,
     projectsRepository: ProjectsRepository,
     updatedTaskId: Long,
@@ -74,6 +87,12 @@ class TaskAddUpdateViewModel(
                     } else {
                         null // !!!!!
                     },
+                selectedEnergyTags = innerScreenUI.selectedEnergyTags ?: currentTask?.energy,
+                selectedPriorityTags = innerScreenUI.selectedPriorityTags ?: currentTask?.priority,
+                selectedTimeTag = innerScreenUI.selectedTimeTag ?: currentTask?.time,
+                selectedCustomTags =
+                    innerScreenUI.selectedCustomTags ?: currentTask?.customTags
+                        ?: emptyList(),
                 projects = projects,
                 lists = lists,
                 selectedList = selectedList,
@@ -89,7 +108,6 @@ class TaskAddUpdateViewModel(
         name: String,
         description: String,
         isCompleted: Boolean,
-        selectedCustomTags: MutableList<TagDomainModel>,
     ) {
         _innerScreenUI.value = _innerScreenUI.value.copy(isLoading = true)
 
@@ -99,7 +117,16 @@ class TaskAddUpdateViewModel(
                 TaskAddUpdateModel(
                     name = name,
                     projectId = uiState.value.selectedProject?.id,
-                    tagIds = selectedCustomTags.map { it.id },
+                    tagIds =
+                        mutableSetOf<Long?>()
+                            .apply {
+                                uiState.value.selectedCustomTags?.let { customTag ->
+                                    addAll(customTag.map { it.id })
+                                }
+                                add(uiState.value.selectedTimeTag?.id)
+                                add(uiState.value.selectedPriorityTags?.id)
+                                add(uiState.value.selectedEnergyTags?.id)
+                            }.filterNotNull(),
                     description = description,
                     list = uiState.value.selectedList?.code ?: TaskEntity.LIST_INBOX,
                     isCompleted = isCompleted,
@@ -119,7 +146,6 @@ class TaskAddUpdateViewModel(
         name: String,
         description: String,
         isCompleted: Boolean,
-        selectedCustomTags: MutableList<TagDomainModel>,
     ) {
         _innerScreenUI.value = _innerScreenUI.value.copy(isLoading = true)
         viewModelScope.launch {
@@ -130,7 +156,17 @@ class TaskAddUpdateViewModel(
                     taskId = taskId,
                     name = name,
                     projectId = uiState.value.selectedProject?.id,
-                    tagIds = selectedCustomTags.map { it.id },
+                    tagIds =
+                        mutableSetOf<Long?>()
+                            .apply {
+                                uiState.value.selectedCustomTags?.let { customTag ->
+                                    addAll(customTag.map { it.id })
+                                }
+
+                                add(uiState.value.selectedTimeTag?.id)
+                                add(uiState.value.selectedPriorityTags?.id)
+                                add(uiState.value.selectedEnergyTags?.id)
+                            }.filterNotNull(),
                     description = description,
                     list = uiState.value.selectedList?.code ?: TaskEntity.LIST_INBOX,
                     isCompleted = isCompleted,
@@ -155,6 +191,39 @@ class TaskAddUpdateViewModel(
         }
     }
 
+    fun clickOpenDialogTime() {
+        viewModelScope.launch {
+            val tags = getTimeTagsUseCase.invoke()
+
+            _innerScreenUI.value =
+                _innerScreenUI.value.copy(
+                    timeDialog = SingleEvent(tags),
+                )
+        }
+    }
+
+    fun clickOpenDialogPriority() {
+        viewModelScope.launch {
+            val tags = priorityTagsUseCase.invoke()
+
+            _innerScreenUI.value =
+                _innerScreenUI.value.copy(
+                    priorityDialog = SingleEvent(tags),
+                )
+        }
+    }
+
+    fun clickOpenDialogEnergy() {
+        viewModelScope.launch {
+            val tags = getEnergyTagsUseCase.invoke()
+
+            _innerScreenUI.value =
+                _innerScreenUI.value.copy(
+                    energyDialog = SingleEvent(tags),
+                )
+        }
+    }
+
     fun applyListProject(
         listCode: String,
         projectId: Long,
@@ -163,6 +232,34 @@ class TaskAddUpdateViewModel(
             _innerScreenUI.value.copy(
                 selectedList = uiState.value.lists.firstOrNull { it.code == listCode },
                 selectedProject = uiState.value.projects.firstOrNull { it.id == projectId },
+            )
+    }
+
+    fun selectCustomTags(selectedTags: List<TagDomainModel>) {
+        _innerScreenUI.value =
+            _innerScreenUI.value.copy(
+                selectedCustomTags = selectedTags,
+            )
+    }
+
+    fun selectTimeTags(timeTag: TagDomainModel) {
+        _innerScreenUI.value =
+            _innerScreenUI.value.copy(
+                selectedTimeTag = timeTag,
+            )
+    }
+
+    fun selectPriorityTags(priorityTag: TagDomainModel) {
+        _innerScreenUI.value =
+            _innerScreenUI.value.copy(
+                selectedPriorityTags = priorityTag,
+            )
+    }
+
+    fun selectEnergyTags(energyTag: TagDomainModel) {
+        _innerScreenUI.value =
+            _innerScreenUI.value.copy(
+                selectedEnergyTags = energyTag,
             )
     }
 
