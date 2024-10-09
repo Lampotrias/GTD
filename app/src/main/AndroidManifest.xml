@@ -5,6 +5,8 @@
   <queries>
     <package android:name="md.obsidian" />
   </queries>
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
   <application
     android:name=".App"
     android:allowBackup="true"

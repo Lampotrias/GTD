@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.lampotrias.gtd.R
 import com.lampotrias.gtd.databinding.FragmentMainBinding
+import com.lampotrias.gtd.notification.NotificationSystemHelper
 import com.lampotrias.gtd.tools.OnClickCooldownListener
 import com.lampotrias.gtd.tools.obsidian.Obsidian
 import com.lampotrias.gtd.ui.addtask.TaskAddUpdateFragment
@@ -16,10 +17,13 @@ import com.lampotrias.gtd.ui.calendar.CalendarFragment
 import com.lampotrias.gtd.ui.inbox.InputBoxFragment
 import com.lampotrias.gtd.ui.next.NextListFragment
 import com.lampotrias.gtd.ui.projects.ProjectsListFragment
+import org.koin.android.ext.android.inject
 
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
+
+    private val notificationSystemHelper by inject<NotificationSystemHelper>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,6 +101,12 @@ class MainFragment : Fragment() {
                     requireContext(),
                     "obsidian://new?vault=Test2&name=newitem&content=content",
                 )
+            },
+        )
+
+        binding.sendMessage.setOnClickListener(
+            OnClickCooldownListener {
+                notificationSystemHelper.sendNotification("title", "message")
             },
         )
 

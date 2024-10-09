@@ -1,5 +1,8 @@
 package com.lampotrias.gtd.di
 
+import com.lampotrias.gtd.lifecycle.ActivityLifecycleDelegate
+import com.lampotrias.gtd.notification.NotificationLifecycleListener
+import com.lampotrias.gtd.notification.NotificationSystemHelper
 import com.lampotrias.gtd.ui.inbox.InputBoxFragment
 import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorFragment
 import org.koin.androidx.fragment.dsl.fragment
@@ -9,6 +12,9 @@ val AppModule =
     module {
         single<DispatcherProvider> { DefaultDispatcherProvider() }
 
+        single { ActivityLifecycleDelegate() }
+        factory { NotificationLifecycleListener(get()) }
+        factory { NotificationSystemHelper(get()) }
         fragment { InputBoxFragment() }
         fragment { ListProjectsSelectorFragment() }
     }
