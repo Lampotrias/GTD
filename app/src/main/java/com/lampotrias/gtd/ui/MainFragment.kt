@@ -18,6 +18,7 @@ import com.lampotrias.gtd.ui.inbox.InputBoxFragment
 import com.lampotrias.gtd.ui.next.NextListFragment
 import com.lampotrias.gtd.ui.projects.ProjectsListFragment
 import org.koin.android.ext.android.inject
+import java.util.Calendar
 
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
@@ -107,6 +108,19 @@ class MainFragment : Fragment() {
         binding.sendMessage.setOnClickListener(
             OnClickCooldownListener {
                 notificationSystemHelper.sendNotification("title", "message")
+
+                val calendar =
+                    Calendar.getInstance().apply {
+                        add(Calendar.SECOND, 30)
+                    }
+
+                notificationSystemHelper.scheduleNotification(
+                    requireContext(),
+                    1234,
+                    "title",
+                    "message",
+                    calendar.timeInMillis,
+                )
             },
         )
 
