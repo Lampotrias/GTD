@@ -182,6 +182,12 @@ class TaskAddUpdateFragment : Fragment() {
             },
         )
 
+        binding.btnNotification.setOnClickListener(
+            OnClickCooldownListener {
+                viewModel.clickOpenNotificationDialog()
+            },
+        )
+
         binding.btnCancel.setOnClickListener(
             OnClickCooldownListener {
                 requireActivity().supportFragmentManager.popBackStack()

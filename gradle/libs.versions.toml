@@ -3,6 +3,7 @@ agp = "8.6.1"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
+robolectric = "4.13"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.6"
@@ -11,9 +12,9 @@ composeBom = "2024.09.03"
 room = "2.7.0-alpha09"
 ksp = "2.0.0-1.0.24"
 ktor = "2.3.11"
-koin = "3.5.6"
-koin-android = "3.5.6"
-koin-compose = "1.1.5"
+koin = "4.0.0"
+koin-android = "4.0.0"
+koin-compose = "4.0.0"
 #kotlinx-serialization = "1.6.3"
 activity = "1.9.2"
 legacySupportV4 = "1.0.0"
@@ -25,12 +26,16 @@ constraintlayout = "2.1.4"
 material = "1.12.0"
 appcompat = "1.7.0"
 material-calendar = "1.9.2"
+kotlin-datetime = "0.6.1"
+google-truth = "1.1.3"
 
 [libraries]
 androidx-activity = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
+kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlin-datetime" }
+google-truth = { group = "com.google.truth", name = "truth", version.ref = "google-truth" }
 material-calendar = { group = "com.applandeo", name = "material-calendar-view", version.ref = "material-calendar" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -46,6 +51,8 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+
 #kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
@@ -55,6 +62,8 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-android" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin-android" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-compose" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
 
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }

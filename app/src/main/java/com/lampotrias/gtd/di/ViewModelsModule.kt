@@ -27,6 +27,7 @@ val viewModelsModule =
                 get(),
                 get(),
                 get(),
+                get(),
             )
         }
         viewModel { ListProjectsSelectorViewModel(get(), get(), get(), get(), get()) }

@@ -16,6 +16,12 @@ android {
         schemaDirectory("$projectDir/schemas")
     }
 
+//    testOptions {
+//        unitTests {
+//            isIncludeAndroidResources = false
+//        }
+//    }
+
     defaultConfig {
         applicationId = "com.lampotrias.gtd"
         minSdk = 26
@@ -38,7 +44,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -82,7 +88,12 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
+    implementation(libs.kotlin.datetime)
     testImplementation(libs.junit)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.test.junit4)
+//    testImplementation(libs.robolectric)
+    testImplementation(libs.google.truth)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

@@ -1,5 +1,6 @@
 package com.lampotrias.gtd.ui.addtask
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,7 @@ import com.lampotrias.gtd.domain.model.ProjectDomainModel
 import com.lampotrias.gtd.domain.model.TagDomainModel
 import com.lampotrias.gtd.domain.model.TaskAddUpdateModel
 import com.lampotrias.gtd.domain.model.TaskDomainModel
+import com.lampotrias.gtd.domain.usecases.GetAvailableNotifyDateTimeUseCase
 import com.lampotrias.gtd.domain.usecases.GetCustomTagsUseCase
 import com.lampotrias.gtd.domain.usecases.GetEnergyTagsUseCase
 import com.lampotrias.gtd.domain.usecases.GetListsUseCase
@@ -24,6 +26,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 data class ScreenUI(
     val isLoading: Boolean = false,
@@ -51,6 +56,7 @@ class TaskAddUpdateViewModel(
     private val getTimeTagsUseCase: GetTimeTagsUseCase,
     private val priorityTagsUseCase: GetPriorityTagsUseCase,
     private val getEnergyTagsUseCase: GetEnergyTagsUseCase,
+    private val getAvailableNotifyDateTime: GetAvailableNotifyDateTimeUseCase,
     getListsUseCase: GetListsUseCase,
     projectsRepository: ProjectsRepository,
     updatedTaskId: Long,
@@ -261,6 +267,17 @@ class TaskAddUpdateViewModel(
             _innerScreenUI.value.copy(
                 selectedEnergyTags = energyTag,
             )
+    }
+
+    fun clickOpenNotificationDialog() {
+        viewModelScope.launch {
+            val ss =
+                getAvailableNotifyDateTime.invoke(
+                    Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                )
+
+            Log.e("asdasd", ss.toString())
+        }
     }
 
     companion object {
