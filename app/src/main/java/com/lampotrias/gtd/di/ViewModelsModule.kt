@@ -7,7 +7,7 @@ import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorViewModel
 import com.lampotrias.gtd.ui.next.NextListViewModel
 import com.lampotrias.gtd.ui.projects.ProjectsListViewModel
 import com.lampotrias.gtd.ui.tasksproject.TasksProjectViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelsModule =
