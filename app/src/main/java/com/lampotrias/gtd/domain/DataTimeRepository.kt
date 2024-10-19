@@ -1,7 +1,8 @@
 package com.lampotrias.gtd.domain
 
-import com.lampotrias.gtd.ui.datetimeplanner.TimeIntervalHolder
+import com.lampotrias.gtd.ui.datetimeplanner.utils.TimeIntervalHolder
+import kotlinx.coroutines.flow.Flow
 
 interface DataTimeRepository {
-    suspend fun getTimeOptions(): TimeIntervalHolder
+    fun getTimeOptions(): Flow<TimeIntervalHolder>
 }

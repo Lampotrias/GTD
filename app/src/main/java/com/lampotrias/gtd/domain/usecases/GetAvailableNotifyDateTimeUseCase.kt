@@ -2,9 +2,11 @@ package com.lampotrias.gtd.domain.usecases
 
 import com.lampotrias.gtd.di.DispatcherProvider
 import com.lampotrias.gtd.domain.DataTimeRepository
-import com.lampotrias.gtd.ui.datetimeplanner.AvailableDataTimeModel
 import com.lampotrias.gtd.ui.datetimeplanner.DataTimeNotificationProvider
-import kotlinx.coroutines.withContext
+import com.lampotrias.gtd.ui.datetimeplanner.utils.AvailableDataTimeModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.datetime.LocalDateTime
 
 class GetAvailableNotifyDateTimeUseCase(
@@ -12,9 +14,8 @@ class GetAvailableNotifyDateTimeUseCase(
     private val dataTimeNotificationProvider: DataTimeNotificationProvider,
     private val dispatcherProvider: DispatcherProvider,
 ) {
-    suspend operator fun invoke(localDateTime: LocalDateTime): AvailableDataTimeModel =
-        withContext(dispatcherProvider.io) {
-            val timeHolders = dateTimeRepository.getTimeOptions()
-            dataTimeNotificationProvider.get(localDateTime, timeHolders)
+    operator fun invoke(localDateTime: LocalDateTime): Flow<AvailableDataTimeModel> =
+        dateTimeRepository.getTimeOptions().flatMapMerge { timeHolders ->
+            flowOf(dataTimeNotificationProvider.get(localDateTime, timeHolders))
         }
 }

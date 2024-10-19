@@ -2,6 +2,7 @@ package com.lampotrias.gtd.di
 
 import com.lampotrias.gtd.MainViewModel
 import com.lampotrias.gtd.ui.addtask.TaskAddUpdateViewModel
+import com.lampotrias.gtd.ui.datetimeplanner.DataTimeNotificationPickerViewModel
 import com.lampotrias.gtd.ui.inbox.InputBoxViewModel
 import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorViewModel
 import com.lampotrias.gtd.ui.next.NextListViewModel
@@ -16,6 +17,7 @@ val viewModelsModule =
         viewModel { InputBoxViewModel(get(), get(), get()) }
         viewModel { NextListViewModel(get(), get(), get()) }
         viewModel { TasksProjectViewModel(get(), get(), get()) }
+        viewModel { DataTimeNotificationPickerViewModel(get(), get(), get()) }
         viewModel {
             TaskAddUpdateViewModel(
                 get(),

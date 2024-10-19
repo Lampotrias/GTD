@@ -1,6 +1,5 @@
 package com.lampotrias.gtd.ui.addtask
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,9 +25,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
 data class ScreenUI(
     val isLoading: Boolean = false,
@@ -40,6 +36,7 @@ data class ScreenUI(
     val timeDialog: SingleEvent<List<TagDomainModel>>? = null,
     val priorityDialog: SingleEvent<List<TagDomainModel>>? = null,
     val energyDialog: SingleEvent<List<TagDomainModel>>? = null,
+    val notifyDialog: SingleEvent<Unit>? = null,
     val selectedList: ListDomainModel? = null,
     val selectedProject: ProjectDomainModel? = null,
     val currentTask: SingleEvent<TaskDomainModel>? = null,
@@ -230,6 +227,15 @@ class TaskAddUpdateViewModel(
         }
     }
 
+    fun clickOpenNotificationDialog() {
+        viewModelScope.launch {
+            _innerScreenUI.value =
+                _innerScreenUI.value.copy(
+                    notifyDialog = SingleEvent(Unit),
+                )
+        }
+    }
+
     fun applyListProject(
         listCode: String,
         projectId: Long,
@@ -267,17 +273,6 @@ class TaskAddUpdateViewModel(
             _innerScreenUI.value.copy(
                 selectedEnergyTags = energyTag,
             )
-    }
-
-    fun clickOpenNotificationDialog() {
-        viewModelScope.launch {
-            val ss =
-                getAvailableNotifyDateTime.invoke(
-                    Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                )
-
-            Log.e("asdasd", ss.toString())
-        }
     }
 
     companion object {

@@ -2,9 +2,9 @@ package com.lampotrias.gtd
 
 import com.google.common.truth.Truth.assertThat
 import com.lampotrias.gtd.ui.datetimeplanner.DataTimeNotificationProvider
-import com.lampotrias.gtd.ui.datetimeplanner.DateOption
-import com.lampotrias.gtd.ui.datetimeplanner.TimeIntervalHolder
-import com.lampotrias.gtd.ui.datetimeplanner.TimeOptions
+import com.lampotrias.gtd.ui.datetimeplanner.utils.DateOption
+import com.lampotrias.gtd.ui.datetimeplanner.utils.TimeIntervalHolder
+import com.lampotrias.gtd.ui.datetimeplanner.utils.TimeOptions
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import org.junit.Test

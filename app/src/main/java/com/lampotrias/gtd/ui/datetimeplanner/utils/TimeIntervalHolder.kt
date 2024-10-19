@@ -1,4 +1,4 @@
-package com.lampotrias.gtd.ui.datetimeplanner
+package com.lampotrias.gtd.ui.datetimeplanner.utils
 
 data class TimeIntervalHolder(
     val morning: TimeOptions.Morning,

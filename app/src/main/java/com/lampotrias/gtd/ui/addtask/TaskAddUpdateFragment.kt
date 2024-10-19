@@ -22,10 +22,12 @@ import com.lampotrias.gtd.tools.DrawableUtils
 import com.lampotrias.gtd.tools.OnClickCooldownListener
 import com.lampotrias.gtd.tools.changeVisibility
 import com.lampotrias.gtd.tools.dpToPx
+import com.lampotrias.gtd.ui.datetimeplanner.DataTimeNotificationPickerFragment
 import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorFragment
 import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorFragment.Companion.CURRENT_LIST_KEY
 import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorFragment.Companion.CURRENT_PROJECT_KEY
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.Calendar
@@ -146,6 +148,10 @@ class TaskAddUpdateFragment : Fragment() {
 
                         uiState.energyDialog?.getContentIfNotHandled()?.let {
                             showSelectEnergyDialog(it)
+                        }
+
+                        uiState.notifyDialog?.getContentIfNotHandled()?.let {
+                            showNotificationDialog()
                         }
                     }
                 }
@@ -268,6 +274,20 @@ class TaskAddUpdateFragment : Fragment() {
                 viewModel.selectEnergyTags(tags[selectedPosition])
             },
         )
+    }
+
+    private fun showNotificationDialog() {
+        val dialog =
+            DataTimeNotificationPickerFragment()
+
+        dialog.listener =
+            object : DataTimeNotificationPickerFragment.OnDialogResultListener {
+                override fun onDialogResult(notifyTime: LocalDateTime) {
+                    Toast.makeText(requireContext(), "time: $notifyTime", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        dialog.show(parentFragmentManager, "CustomDialog")
     }
 
     private fun showSelectPriorityDialog(tags: List<TagDomainModel>) {
