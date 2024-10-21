@@ -57,12 +57,13 @@ class TasksMapper(
                             id = it.tag.id,
                             name = it.tag.name,
                             iconName = it.tag.iconName,
-                        type = tagTypeMapper.toModel(it.tagType),
-                    )
-                }.firstOrNull(),
+                            type = tagTypeMapper.toModel(it.tagType),
+                        )
+                    }.firstOrNull(),
             list = entity.taskEntity.list,
             description = entity.taskEntity.description,
             isCompleted = entity.taskEntity.isCompleted,
+            notificationTime = entity.taskEntity.notificationTime,
         )
 
     override fun toEntity(model: TaskDomainModel): TaskWithTagsAndProjectEntity =
@@ -74,6 +75,7 @@ class TasksMapper(
                     list = model.list,
                     projectId = model.project?.id,
                     description = model.description,
+                    notificationTime = model.notificationTime,
                 ),
             projectEntity = model.project?.let { projectMapper.toEntity(it) },
             tags = emptyList(),

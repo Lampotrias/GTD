@@ -11,7 +11,6 @@ import com.lampotrias.gtd.domain.model.ProjectDomainModel
 import com.lampotrias.gtd.domain.model.TagDomainModel
 import com.lampotrias.gtd.domain.model.TaskAddUpdateModel
 import com.lampotrias.gtd.domain.model.TaskDomainModel
-import com.lampotrias.gtd.domain.usecases.GetAvailableNotifyDateTimeUseCase
 import com.lampotrias.gtd.domain.usecases.GetCustomTagsUseCase
 import com.lampotrias.gtd.domain.usecases.GetEnergyTagsUseCase
 import com.lampotrias.gtd.domain.usecases.GetListsUseCase
@@ -25,6 +24,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 
 data class ScreenUI(
     val isLoading: Boolean = false,
@@ -37,6 +40,7 @@ data class ScreenUI(
     val priorityDialog: SingleEvent<List<TagDomainModel>>? = null,
     val energyDialog: SingleEvent<List<TagDomainModel>>? = null,
     val notifyDialog: SingleEvent<Unit>? = null,
+    val notification: LocalDateTime? = null,
     val selectedList: ListDomainModel? = null,
     val selectedProject: ProjectDomainModel? = null,
     val currentTask: SingleEvent<TaskDomainModel>? = null,
@@ -53,7 +57,6 @@ class TaskAddUpdateViewModel(
     private val getTimeTagsUseCase: GetTimeTagsUseCase,
     private val priorityTagsUseCase: GetPriorityTagsUseCase,
     private val getEnergyTagsUseCase: GetEnergyTagsUseCase,
-    private val getAvailableNotifyDateTime: GetAvailableNotifyDateTimeUseCase,
     getListsUseCase: GetListsUseCase,
     projectsRepository: ProjectsRepository,
     updatedTaskId: Long,
@@ -98,6 +101,10 @@ class TaskAddUpdateViewModel(
                         ?: emptyList(),
                 projects = projects,
                 lists = lists,
+                notification =
+                    innerScreenUI.notification ?: currentTask?.notificationTime?.toLocalDateTime(
+                        TimeZone.currentSystemDefault(),
+                    ),
                 selectedList = selectedList,
                 selectedProject = _innerScreenUI.value.selectedProject ?: currentTask?.project,
             )
@@ -133,6 +140,10 @@ class TaskAddUpdateViewModel(
                     description = description,
                     list = uiState.value.selectedList?.code ?: TaskEntity.LIST_INBOX,
                     isCompleted = isCompleted,
+                    notificationTime =
+                        uiState.value.notification?.let {
+                            it.toInstant(TimeZone.currentSystemDefault())
+                        },
                 ),
             )
 
@@ -173,6 +184,10 @@ class TaskAddUpdateViewModel(
                     description = description,
                     list = uiState.value.selectedList?.code ?: TaskEntity.LIST_INBOX,
                     isCompleted = isCompleted,
+                    notificationTime =
+                        uiState.value.notification?.let {
+                            it.toInstant(TimeZone.currentSystemDefault())
+                        },
                 ),
             )
             _innerScreenUI.value =
@@ -244,6 +259,13 @@ class TaskAddUpdateViewModel(
             _innerScreenUI.value.copy(
                 selectedList = uiState.value.lists.firstOrNull { it.code == listCode },
                 selectedProject = uiState.value.projects.firstOrNull { it.id == projectId },
+            )
+    }
+
+    fun setNotification(notification: LocalDateTime) {
+        _innerScreenUI.value =
+            _innerScreenUI.value.copy(
+                notification = notification,
             )
     }
 

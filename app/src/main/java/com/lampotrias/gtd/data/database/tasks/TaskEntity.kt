@@ -3,6 +3,7 @@ package com.lampotrias.gtd.data.database.tasks
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.datetime.Instant
 
 @Entity(
     tableName = "tasks",
@@ -15,6 +16,7 @@ data class TaskEntity(
     val list: String, // входящие, следующие действия, лист ожидания, календарь, когда-нибудь
     @ColumnInfo(name = "project_id")
     val projectId: Long?,
+    val notificationTime: Instant?,
     val description: String,
     @ColumnInfo(name = "is_completed")
     val isCompleted: Boolean = false,

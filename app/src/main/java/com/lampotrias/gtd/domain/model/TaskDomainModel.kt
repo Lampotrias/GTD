@@ -1,5 +1,7 @@
 package com.lampotrias.gtd.domain.model
 
+import kotlinx.datetime.Instant
+
 data class TaskDomainModel(
     val id: Long,
     val name: String,
@@ -11,4 +13,5 @@ data class TaskDomainModel(
     val list: String,
     val description: String,
     val isCompleted: Boolean,
+    val notificationTime: Instant?,
 )

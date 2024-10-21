@@ -283,7 +283,7 @@ class TaskAddUpdateFragment : Fragment() {
         dialog.listener =
             object : DataTimeNotificationPickerFragment.OnDialogResultListener {
                 override fun onDialogResult(notifyTime: LocalDateTime) {
-                    Toast.makeText(requireContext(), "time: $notifyTime", Toast.LENGTH_SHORT).show()
+                    viewModel.setNotification(notifyTime)
                 }
             }
 

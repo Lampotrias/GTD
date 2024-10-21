@@ -24,6 +24,7 @@ class TaskRepositoryImpl(
                     projectId = taskAddUpdateModel.projectId,
                     description = taskAddUpdateModel.description,
                     list = taskAddUpdateModel.list,
+                    notificationTime = taskAddUpdateModel.notificationTime,
                 )
 
             if (taskAddUpdateModel.tagIds.isEmpty()) {
@@ -44,6 +45,7 @@ class TaskRepositoryImpl(
                     description = taskAddUpdateModel.description,
                     list = taskAddUpdateModel.list,
                     isCompleted = taskAddUpdateModel.isCompleted,
+                    notificationTime = taskAddUpdateModel.notificationTime,
                 )
 
             taskDao.deleteTagCrossRef(taskAddUpdateModel.taskId)

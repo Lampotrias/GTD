@@ -49,6 +49,7 @@ class ProjectTaskMapper(
                 taskEntity.tags
                     .firstOrNull { it.tagType.id == ENERGY_TAG_TYPE_ID }
                     ?.let { tagToDomainModel(it) },
+            notificationTime = taskEntity.taskEntity.notificationTime,
         )
     }
 
