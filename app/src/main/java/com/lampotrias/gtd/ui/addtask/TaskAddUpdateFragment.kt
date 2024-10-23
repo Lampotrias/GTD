@@ -98,6 +98,7 @@ class TaskAddUpdateFragment : Fragment() {
                                 uiState.selectedCustomTags?.joinToString(", ") { it.name }
                             }"
 
+                        binding.notificationTime.text = "Уведомление на: ${uiState.notification}"
                         binding.tagsTime.text = "Время: ${uiState.selectedTimeTag?.name}"
                         binding.tagsEnergy.text = "Энергия: ${uiState.selectedEnergyTags?.name}"
                         binding.tagsPriority.text =
