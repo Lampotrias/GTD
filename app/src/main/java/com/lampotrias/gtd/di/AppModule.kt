@@ -1,5 +1,6 @@
 package com.lampotrias.gtd.di
 
+import com.lampotrias.gtd.data.TaskAlarmManager
 import com.lampotrias.gtd.lifecycle.ActivityLifecycleDelegate
 import com.lampotrias.gtd.notification.NotificationLifecycleListener
 import com.lampotrias.gtd.notification.NotificationSystemHelper
@@ -11,6 +12,8 @@ import org.koin.dsl.module
 val AppModule =
     module {
         single<DispatcherProvider> { DefaultDispatcherProvider() }
+
+        single { TaskAlarmManager(get()) }
 
         single { ActivityLifecycleDelegate() }
         factory { NotificationLifecycleListener(get()) }

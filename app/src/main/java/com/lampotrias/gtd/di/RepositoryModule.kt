@@ -19,8 +19,11 @@ import com.lampotrias.gtd.domain.usecases.GetInboxTasksUseCase
 import com.lampotrias.gtd.domain.usecases.GetListsUseCase
 import com.lampotrias.gtd.domain.usecases.GetNextTasksUseCase
 import com.lampotrias.gtd.domain.usecases.GetPriorityTagsUseCase
+import com.lampotrias.gtd.domain.usecases.GetTaskByIdUseCase
 import com.lampotrias.gtd.domain.usecases.GetTimeTagsUseCase
+import com.lampotrias.gtd.domain.usecases.SaveTaskUseCase
 import com.lampotrias.gtd.domain.usecases.UpdateTaskCompleteUseCase
+import com.lampotrias.gtd.domain.usecases.UpdateTaskUseCase
 import com.lampotrias.gtd.ui.datetimeplanner.DataTimeNotificationProvider
 import org.koin.dsl.module
 
@@ -42,6 +45,9 @@ val repositoryModule =
         single { GetNextTasksUseCase(get(), get()) }
         single { UpdateTaskCompleteUseCase(get(), get()) }
         single { GetAvailableNotifyDateTimeUseCase(get(), get(), get()) }
+        single { SaveTaskUseCase(get(), get(), get()) }
+        single { UpdateTaskUseCase(get(), get(), get()) }
+        single { GetTaskByIdUseCase(get(), get()) }
 
         // Mappers
         single { ProjectMapper() }

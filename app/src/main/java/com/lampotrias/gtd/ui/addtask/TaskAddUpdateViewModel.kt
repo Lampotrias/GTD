@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lampotrias.gtd.data.database.tasks.TaskEntity
 import com.lampotrias.gtd.domain.ProjectsRepository
-import com.lampotrias.gtd.domain.TaskRepository
 import com.lampotrias.gtd.domain.model.ListDomainModel
 import com.lampotrias.gtd.domain.model.ProjectDomainModel
 import com.lampotrias.gtd.domain.model.TagDomainModel
@@ -15,7 +14,10 @@ import com.lampotrias.gtd.domain.usecases.GetCustomTagsUseCase
 import com.lampotrias.gtd.domain.usecases.GetEnergyTagsUseCase
 import com.lampotrias.gtd.domain.usecases.GetListsUseCase
 import com.lampotrias.gtd.domain.usecases.GetPriorityTagsUseCase
+import com.lampotrias.gtd.domain.usecases.GetTaskByIdUseCase
 import com.lampotrias.gtd.domain.usecases.GetTimeTagsUseCase
+import com.lampotrias.gtd.domain.usecases.SaveTaskUseCase
+import com.lampotrias.gtd.domain.usecases.UpdateTaskUseCase
 import com.lampotrias.gtd.tools.SingleEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,8 +54,10 @@ data class ScreenUI(
 
 class TaskAddUpdateViewModel(
     @Suppress("unused") private val handle: SavedStateHandle,
-    private val taskRepository: TaskRepository,
+    private val getTaskByIdUseCase: GetTaskByIdUseCase,
     private val getCustomTagsUseCase: GetCustomTagsUseCase,
+    private val saveTaskUseCase: SaveTaskUseCase,
+    private val updateTaskUseCase: UpdateTaskUseCase,
     private val getTimeTagsUseCase: GetTimeTagsUseCase,
     private val priorityTagsUseCase: GetPriorityTagsUseCase,
     private val getEnergyTagsUseCase: GetEnergyTagsUseCase,
@@ -63,7 +67,7 @@ class TaskAddUpdateViewModel(
 ) : ViewModel() {
     private val _innerScreenUI = MutableStateFlow(ScreenUI())
 
-    private val currentTaskFlow = taskRepository.getTaskById(updatedTaskId)
+    private val currentTaskFlow = getTaskByIdUseCase.invoke(updatedTaskId)
 
     private var firstInitComplete = false
 
@@ -123,7 +127,7 @@ class TaskAddUpdateViewModel(
 
         viewModelScope.launch {
             delay(FAKE_DELAY)
-            taskRepository.insertTask(
+            saveTaskUseCase.invoke(
                 TaskAddUpdateModel(
                     name = name,
                     projectId = uiState.value.selectedProject?.id,
@@ -140,10 +144,7 @@ class TaskAddUpdateViewModel(
                     description = description,
                     list = uiState.value.selectedList?.code ?: TaskEntity.LIST_INBOX,
                     isCompleted = isCompleted,
-                    notificationTime =
-                        uiState.value.notification?.let {
-                            it.toInstant(TimeZone.currentSystemDefault())
-                        },
+                    notificationTime = uiState.value.notification?.toInstant(TimeZone.currentSystemDefault()),
                 ),
             )
 
@@ -165,7 +166,7 @@ class TaskAddUpdateViewModel(
         viewModelScope.launch {
             delay(FAKE_DELAY)
 
-            taskRepository.updateTask(
+            updateTaskUseCase.invoke(
                 TaskAddUpdateModel(
                     taskId = taskId,
                     name = name,
@@ -184,10 +185,7 @@ class TaskAddUpdateViewModel(
                     description = description,
                     list = uiState.value.selectedList?.code ?: TaskEntity.LIST_INBOX,
                     isCompleted = isCompleted,
-                    notificationTime =
-                        uiState.value.notification?.let {
-                            it.toInstant(TimeZone.currentSystemDefault())
-                        },
+                    notificationTime = uiState.value.notification?.toInstant(TimeZone.currentSystemDefault()),
                 ),
             )
             _innerScreenUI.value =
