@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7d7056ce899a40c7178f8dca2f01ae88",
+    "identityHash": "a44dc04646c08320bcbde36ef45ea66c",
     "entities": [
       {
         "tableName": "tasks",
@@ -170,11 +170,36 @@
             "tag_id"
           ]
         }
+      },
+      {
+        "tableName": "tasks_sub_tasks",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`parent_task_id` INTEGER NOT NULL, `child_task_id` INTEGER NOT NULL, PRIMARY KEY(`parent_task_id`, `child_task_id`))",
+        "fields": [
+          {
+            "fieldPath": "parentTaskId",
+            "columnName": "parent_task_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "childTaskId",
+            "columnName": "child_task_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "parent_task_id",
+            "child_task_id"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7d7056ce899a40c7178f8dca2f01ae88')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a44dc04646c08320bcbde36ef45ea66c')"
     ]
   }
 }

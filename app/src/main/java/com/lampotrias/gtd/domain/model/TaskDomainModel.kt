@@ -11,6 +11,7 @@ data class TaskDomainModel(
     val priority: TagDomainModel?,
     val energy: TagDomainModel?,
     val list: String,
+    val subtasks: List<TaskDomainModel>,
     val description: String,
     val isCompleted: Boolean,
     val notificationTime: Instant?,

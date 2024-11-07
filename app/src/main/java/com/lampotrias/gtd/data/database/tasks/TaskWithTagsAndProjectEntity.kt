@@ -26,6 +26,35 @@ data class TaskWithTagsAndProjectEntity(
     val projectEntity: ProjectEntity?,
 )
 
+data class TaskWithTagsAndProjectAndSubtasksEntity(
+    @Embedded
+    val taskEntity: TaskEntity,
+    @Relation(
+        entity = TagEntity::class,
+        parentColumn = "task_id",
+        entityColumn = "tag_id",
+        associateBy = Junction(TasksTagsCrossRef::class),
+    )
+    val tags: List<TagEntityWithType>,
+    @Relation(
+        parentColumn = "project_id",
+        entityColumn = "id",
+    )
+    val projectEntity: ProjectEntity?,
+    @Relation(
+        entity = TaskEntity::class,
+        parentColumn = "task_id",
+        entityColumn = "task_id",
+        associateBy =
+            Junction(
+                TasksSubTasksCrossRef::class,
+                parentColumn = "parent_task_id",
+                entityColumn = "child_task_id",
+            ),
+    )
+    val subTasks: List<TaskWithTagsAndProjectEntity>,
+)
+
 data class TaskWithTagsEntity(
     @Embedded
     val taskEntity: TaskEntity,
@@ -47,4 +76,15 @@ data class TasksTagsCrossRef(
     val taskEntityId: Long,
     @ColumnInfo(name = "tag_id")
     val tagId: Long,
+)
+
+@Entity(
+    tableName = "tasks_sub_tasks",
+    primaryKeys = ["parent_task_id", "child_task_id"],
+)
+data class TasksSubTasksCrossRef(
+    @ColumnInfo(name = "parent_task_id")
+    val parentTaskId: Long,
+    @ColumnInfo(name = "child_task_id")
+    val childTaskId: Long,
 )

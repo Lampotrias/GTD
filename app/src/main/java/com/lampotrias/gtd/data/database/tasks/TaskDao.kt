@@ -18,6 +18,9 @@ interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTagCrossRef(crossRef: TasksTagsCrossRef)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSubtasksCrossRef(crossRef: TasksSubTasksCrossRef)
+
     @Query("DELETE FROM tasks_tags WHERE task_id = :taskId")
     suspend fun deleteTagCrossRef(taskId: Long)
 
@@ -39,19 +42,19 @@ interface TaskDao {
 
     @Transaction
     @Query("SELECT * FROM tasks WHERE task_id = :taskId")
-    fun getTaskWithTagsById(taskId: Long): Flow<TaskWithTagsAndProjectEntity?>
+    fun getTaskWithTagsById(taskId: Long): Flow<TaskWithTagsAndProjectAndSubtasksEntity?>
 
     @Transaction
     @Query("SELECT * FROM tasks")
-    fun getAllTasksWithTags(): Flow<List<TaskWithTagsAndProjectEntity>>
+    fun getAllTasksWithTags(): Flow<List<TaskWithTagsAndProjectAndSubtasksEntity>>
 
     @Transaction
     @Query("SELECT * FROM tasks WHERE list = :list")
-    fun selectTasksInList(list: String): Flow<List<TaskWithTagsAndProjectEntity>>
+    fun selectTasksInList(list: String): Flow<List<TaskWithTagsAndProjectAndSubtasksEntity>>
 
     @Transaction
     @Query("SELECT * FROM tasks WHERE project_id = :projectId")
-    fun selectTasksInProject(projectId: Long): Flow<List<TaskWithTagsAndProjectEntity>>
+    fun selectTasksInProject(projectId: Long): Flow<List<TaskWithTagsAndProjectAndSubtasksEntity>>
 
     @Query("UPDATE tasks SET is_completed = :completed WHERE task_id = :taskId")
     fun updateTaskComplete(
@@ -61,12 +64,12 @@ interface TaskDao {
 
     @Transaction
     @Query("SELECT * FROM tasks WHERE list = :list")
-    fun getTasksByList(list: String): Flow<List<TaskWithTagsAndProjectEntity>>
+    fun getTasksByList(list: String): Flow<List<TaskWithTagsAndProjectAndSubtasksEntity>>
 
     @Transaction
     @Query("SELECT * FROM tasks WHERE list = :list AND project_id = :projectId")
     fun getTasksByListAndProject(
         list: String,
         projectId: Long,
-    ): Flow<List<TaskWithTagsAndProjectEntity>>
+    ): Flow<List<TaskWithTagsAndProjectAndSubtasksEntity>>
 }

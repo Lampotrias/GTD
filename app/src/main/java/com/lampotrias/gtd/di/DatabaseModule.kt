@@ -306,6 +306,12 @@ val databaseModule =
                             } catch (ex: Exception) {
                                 ex.printStackTrace()
                             }
+
+                            try {
+                                connection.execSQL("INSERT INTO `tasks_sub_tasks` (`parent_task_id`, `child_task_id`) VALUES (1, 2)")
+                            } catch (ex: Exception) {
+                                ex.printStackTrace()
+                            }
                         }
                     },
                 ).build()

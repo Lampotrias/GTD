@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Relation
 import com.lampotrias.gtd.data.database.tasks.TaskEntity
-import com.lampotrias.gtd.data.database.tasks.TaskWithTagsEntity
+import com.lampotrias.gtd.data.database.tasks.TaskWithTagsAndProjectAndSubtasksEntity
 
 @Entity(tableName = "projects")
 data class ProjectWithTasksEntity(
@@ -15,5 +15,5 @@ data class ProjectWithTasksEntity(
         parentColumn = "id",
         entityColumn = "project_id",
     )
-    val tasks: List<TaskWithTagsEntity>,
+    val tasks: List<TaskWithTagsAndProjectAndSubtasksEntity>,
 )

@@ -11,6 +11,7 @@ import com.lampotrias.gtd.data.database.tagtypes.TagTypeDao
 import com.lampotrias.gtd.data.database.tagtypes.TagTypeEntity
 import com.lampotrias.gtd.data.database.tasks.TaskDao
 import com.lampotrias.gtd.data.database.tasks.TaskEntity
+import com.lampotrias.gtd.data.database.tasks.TasksSubTasksCrossRef
 import com.lampotrias.gtd.data.database.tasks.TasksTagsCrossRef
 
 @Database(
@@ -20,6 +21,7 @@ import com.lampotrias.gtd.data.database.tasks.TasksTagsCrossRef
         TagTypeEntity::class,
         ProjectEntity::class,
         TasksTagsCrossRef::class,
+        TasksSubTasksCrossRef::class,
     ],
     version = 1,
 )

@@ -53,7 +53,7 @@ val repositoryModule =
         single { ProjectMapper() }
         single { TasksMapper(get(), get()) }
         single { TagTypeMapper() }
-        single { ProjectTaskMapper(get(), get()) }
+        single { ProjectTaskMapper(get()) }
 
         factory { DataTimeNotificationProvider() }
     }
