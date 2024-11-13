@@ -16,10 +16,11 @@ val viewModelsModule =
         viewModel { MainViewModel() }
         viewModel { InputBoxViewModel(get(), get(), get()) }
         viewModel { NextListViewModel(get(), get(), get()) }
-        viewModel { TasksProjectViewModel(get(), get(), get()) }
+        viewModel { TasksProjectViewModel(get(), get(), get(), get()) }
         viewModel { DataTimeNotificationPickerViewModel(get(), get(), get()) }
         viewModel {
             TaskAddUpdateViewModel(
+                get(),
                 get(),
                 get(),
                 get(),

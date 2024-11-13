@@ -17,6 +17,7 @@ import com.lampotrias.gtd.domain.usecases.GetPriorityTagsUseCase
 import com.lampotrias.gtd.domain.usecases.GetTaskByIdUseCase
 import com.lampotrias.gtd.domain.usecases.GetTimeTagsUseCase
 import com.lampotrias.gtd.domain.usecases.SaveTaskUseCase
+import com.lampotrias.gtd.domain.usecases.UpdateTaskCompleteUseCase
 import com.lampotrias.gtd.domain.usecases.UpdateTaskUseCase
 import com.lampotrias.gtd.tools.SingleEvent
 import kotlinx.coroutines.delay
@@ -46,6 +47,7 @@ data class ScreenUI(
     val selectedList: ListDomainModel? = null,
     val selectedProject: ProjectDomainModel? = null,
     val currentTask: SingleEvent<TaskDomainModel>? = null,
+    val subtasks: List<TaskDomainModel>? = null,
     val selectedCustomTags: List<TagDomainModel>? = null,
     val selectedTimeTag: TagDomainModel? = null,
     val selectedPriorityTags: TagDomainModel? = null,
@@ -61,6 +63,7 @@ class TaskAddUpdateViewModel(
     private val getTimeTagsUseCase: GetTimeTagsUseCase,
     private val priorityTagsUseCase: GetPriorityTagsUseCase,
     private val getEnergyTagsUseCase: GetEnergyTagsUseCase,
+    private val updateTaskCompleteUseCase: UpdateTaskCompleteUseCase,
     getListsUseCase: GetListsUseCase,
     projectsRepository: ProjectsRepository,
     updatedTaskId: Long,
@@ -87,6 +90,8 @@ class TaskAddUpdateViewModel(
                     )
                 }
 
+            val subtasks = innerScreenUI.subtasks ?: currentTask?.subtasks
+
             innerScreenUI.copy(
                 currentTask =
                     if (!firstInitComplete) {
@@ -103,6 +108,7 @@ class TaskAddUpdateViewModel(
                 selectedCustomTags =
                     innerScreenUI.selectedCustomTags ?: currentTask?.customTags
                         ?: emptyList(),
+                subtasks = subtasks,
                 projects = projects,
                 lists = lists,
                 notification =
@@ -293,6 +299,15 @@ class TaskAddUpdateViewModel(
             _innerScreenUI.value.copy(
                 selectedEnergyTags = energyTag,
             )
+    }
+
+    fun onSubtaskCompleteChange(
+        subtask: TaskDomainModel,
+        checked: Boolean,
+    ) {
+        viewModelScope.launch {
+            updateTaskCompleteUseCase.invoke(subtask.id, checked)
+        }
     }
 
     companion object {

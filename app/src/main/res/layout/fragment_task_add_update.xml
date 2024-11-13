@@ -231,4 +231,25 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/tags_time"
     tools:text="Notification time: " />
+  <TextView
+    android:id="@+id/subtask_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:text="subtasks"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/notification_time" />
+  <LinearLayout
+    android:id="@+id/subtask_container"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/subtask_title"
+    tools:background="#fff000"
+    tools:layout_height="150dp"
+    tools:layout_width="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.lampotrias.gtd.ui
+package com.lampotrias.gtd.ui.views
 
 import android.content.Context
 import android.graphics.Color

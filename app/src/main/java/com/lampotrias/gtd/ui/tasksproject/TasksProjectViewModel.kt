@@ -5,11 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lampotrias.gtd.domain.ProjectsRepository
 import com.lampotrias.gtd.domain.model.ProjectWithTasksDomainModel
+import com.lampotrias.gtd.domain.model.TaskDomainModel
+import com.lampotrias.gtd.domain.usecases.UpdateTaskCompleteUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 data class TasksProjectScreenUi(
     val title: String = "",
@@ -21,6 +24,7 @@ class TasksProjectViewModel(
     @Suppress("unused") private val handle: SavedStateHandle,
     projectId: Long,
     projectsRepository: ProjectsRepository,
+    private val updateTaskCompleteUseCase: UpdateTaskCompleteUseCase,
 ) : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
 
@@ -38,6 +42,12 @@ class TasksProjectViewModel(
             started = SharingStarted.WhileSubscribed(WHILE_SUBSCRIBED_TIMEOUT),
             initialValue = TasksProjectScreenUi(isLoading = true),
         )
+
+    fun taskCompleteChange(task: TaskDomainModel) {
+        viewModelScope.launch {
+            updateTaskCompleteUseCase.invoke(task.id, !task.isCompleted)
+        }
+    }
 
 //    @Suppress("UNUSED_PARAMETER")
 //    fun taskClick(task: TaskDomainModel) {

@@ -13,8 +13,8 @@ import com.lampotrias.gtd.tools.DrawableUtils
 import com.lampotrias.gtd.tools.OnClickCooldownListener
 import com.lampotrias.gtd.tools.changeVisibility
 import com.lampotrias.gtd.tools.dpToPx
-import com.lampotrias.gtd.ui.TagView
 import com.lampotrias.gtd.ui.TaskEventListener
+import com.lampotrias.gtd.ui.views.TagView
 
 class TaskViewHolder(
     itemView: View,

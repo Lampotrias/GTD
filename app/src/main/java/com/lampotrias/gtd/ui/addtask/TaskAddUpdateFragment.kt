@@ -10,14 +10,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.lampotrias.gtd.R
 import com.lampotrias.gtd.databinding.FragmentTaskAddUpdateBinding
 import com.lampotrias.gtd.domain.model.TagDomainModel
+import com.lampotrias.gtd.domain.model.TaskDomainModel
 import com.lampotrias.gtd.tools.DrawableUtils
 import com.lampotrias.gtd.tools.OnClickCooldownListener
 import com.lampotrias.gtd.tools.changeVisibility
@@ -26,6 +30,7 @@ import com.lampotrias.gtd.ui.datetimeplanner.DataTimeNotificationPickerFragment
 import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorFragment
 import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorFragment.Companion.CURRENT_LIST_KEY
 import com.lampotrias.gtd.ui.listprojectselector.ListProjectsSelectorFragment.Companion.CURRENT_PROJECT_KEY
+import com.lampotrias.gtd.ui.views.SubtaskView
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -86,6 +91,41 @@ class TaskAddUpdateFragment : Fragment() {
                         } ?: run {
                             binding.listName.text = uiState.selectedList?.name
                             binding.projectName.text = uiState.selectedProject?.name
+                        }
+
+                        binding.subtaskContainer.removeAllViews()
+                        uiState.subtasks?.forEach {
+                            binding.subtaskContainer.addView(
+                                SubtaskView(requireContext()).apply {
+                                    applySubtask(it)
+                                    listener =
+                                        object : SubtaskView.Listener {
+                                            override fun onSubtaskClicked(subtask: TaskDomainModel) {
+                                                val bundle =
+                                                    Bundle().apply {
+                                                        putLong(TASK_ID_PARAM, subtask.id)
+                                                    }
+                                                requireActivity()
+                                                    .supportFragmentManager
+                                                    .beginTransaction()
+                                                    .add(
+                                                        R.id.fragment_container_view,
+                                                        TaskAddUpdateFragment::class.java,
+                                                        bundle,
+                                                    ).addToBackStack(null)
+                                                    .commit()
+                                            }
+
+                                            override fun onSubtaskCompleteChange(
+                                                subtask: TaskDomainModel,
+                                                isChecked: Boolean,
+                                            ) {
+                                                viewModel.onSubtaskCompleteChange(subtask, isChecked)
+                                            }
+                                        }
+                                },
+                                LinearLayout.LayoutParams(MATCH_PARENT, requireContext().dpToPx(30)),
+                            )
                         }
 
                         binding.projectName.changeVisibility(

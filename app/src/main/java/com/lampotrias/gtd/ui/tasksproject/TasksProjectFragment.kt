@@ -47,9 +47,9 @@ class TasksProjectFragment : Fragment() {
                         .commit()
                 }
 //
-//                override fun onTaskCompleteChange(task: TaskDomainModel) {
-//                    viewModel.taskCompleteChange(task)
-//                }
+                override fun onTaskCompleteChange(task: TaskDomainModel) {
+                    viewModel.taskCompleteChange(task)
+}
 //
 //                override fun onTaskFavoriteClick(task: TaskDomainModel) {
 //                    viewModel.taskFavoriteClick(task)
